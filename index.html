@@ -16,33 +16,37 @@
 body{
  margin:0;
  font-family:'Playfair Display',serif;
- background:var(--dark);
+ background:#000;
  color:#f5f5f5;
 }
 
-#bg{
- position:fixed; inset:0; z-index:-2;
-}
+/* HINTERGRUND */
+#bg{position:fixed;inset:0;z-index:-2}
 .slide{
- position:absolute; inset:0;
+ position:absolute;inset:0;
  background-size:cover;
  background-position:center;
  opacity:0;
- animation:fade 50s infinite;
+ animation:fade 60s infinite;
+ filter:contrast(1.05) saturate(1.1);
 }
 .slide:nth-child(1){background-image:url("bilder/bild1.jpg")}
-.slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:10s}
-.slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:20s}
-.slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:30s}
-.slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:40s}
+.slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:12s}
+.slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:24s}
+.slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:36s}
+.slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:48s}
 
 @keyframes fade{
- 0%{opacity:0} 10%{opacity:1} 25%{opacity:1} 35%{opacity:0}
+ 0%{opacity:0}
+ 8%{opacity:1}
+ 22%{opacity:1}
+ 30%{opacity:0}
 }
 
 .overlay{
- position:fixed; inset:0;
- background:rgba(0,0,0,.8);
+ position:fixed;inset:0;
+ background:rgba(0,0,0,.55);
+ backdrop-filter:blur(1px);
  z-index:-1;
 }
 
@@ -50,29 +54,29 @@ body{
  max-width:900px;
  margin:60px auto;
  padding:50px;
- background:rgba(10,10,10,.85);
+ background:rgba(15,15,15,.82);
  border:1px solid var(--gold);
- box-shadow:0 0 40px rgba(201,178,107,.2);
+ box-shadow:0 0 60px rgba(201,178,107,.25);
 }
 
 h1{color:var(--gold);text-align:center}
-p{text-align:center;line-height:1.7;font-size:18px}
+p{text-align:center;line-height:1.8;font-size:18px}
 
 button{
  background:none;
  border:1px solid var(--gold);
  color:var(--gold);
  padding:14px 32px;
- font-family:inherit;
  font-size:18px;
  cursor:pointer;
- margin:20px auto;
  display:block;
+ margin:25px auto;
 }
 button:hover{background:var(--gold);color:#000}
 
+/* MODAL */
 .modal{
- position:fixed; inset:0;
+ position:fixed;inset:0;
  display:none;
  justify-content:center;
  align-items:center;
@@ -83,42 +87,46 @@ button:hover{background:var(--gold);color:#000}
  border:1px solid var(--gold);
  padding:30px;
  width:90%;
- max-width:520px;
+ max-width:550px;
 }
 
 input,textarea{
  width:100%;
- margin-bottom:10px;
  padding:10px;
+ margin-bottom:10px;
  background:#1a1a1a;
  border:1px solid #333;
  color:white;
  font-family:inherit;
 }
 
+.person{
+ margin-bottom:6px;
+}
+
+/* ADMIN */
+.admin{
+ display:none;
+ max-width:1100px;
+ margin:40px auto;
+ padding:30px;
+ background:#111;
+ border:1px solid var(--gold);
+}
 table{
  width:100%;
  border-collapse:collapse;
 }
 th,td{
  border:1px solid #444;
- padding:6px;
- text-align:left;
-}
-
-.admin{
- display:none;
- max-width:1000px;
- margin:40px auto;
- padding:30px;
- background:#111;
- border:1px solid var(--gold);
+ padding:8px;
+ vertical-align:top;
 }
 
 footer{
  text-align:center;
+ opacity:.5;
  margin:40px;
- opacity:.6;
  cursor:pointer;
 }
 </style>
@@ -137,51 +145,59 @@ footer{
 
 <!-- EINLADUNG -->
 <div class="card" id="invite">
-<h1>Liebe Familie und Freunde!</h1>
-<p>
-<b>Ein Stern am Himmel und Schatz auf Erden wird 90</b><br><br>
-Wir laden herzlich ein, den <b>90. Geburtstag von Maria Ronczka</b> mit uns zu feiern.<br><br>
-<b>Wann:</b> Samstag, den 11. April 2026, ab 13 Uhr<br>
-<b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
-Wir freuen uns auf einen schönen Tag mit Euch.<br>
-Leider können wir keine Übernachtung anbieten.<br>
-Rückmeldung bitte bis Ende Februar.<br><br>
-<b>Maria Ronczka mit Familie</b>
-</p>
+<h1 id="title"></h1>
+<p id="inviteText"></p>
 
-<button onclick="openForm()">Rückmeldung geben</button>
+<button onclick="openForm()" id="btnReply"></button>
+
+<select onchange="setLang(this.value)" style="display:block;margin:auto">
+ <option value="de">Deutsch</option>
+ <option value="pl">Polski</option>
+</select>
 </div>
 
 <!-- FORMULAR -->
 <div class="modal" id="formModal">
 <div class="modal-box">
-<h3 style="color:var(--gold)">Rückmeldung</h3>
+<h3 id="formTitle"></h3>
 
-<input id="name" placeholder="Name">
-<input id="telefon" placeholder="Telefonnummer">
-<label>Ankunft (ab 13 Uhr)</label>
-<input type="time" id="zeit" min="13:00">
-<input type="number" id="anzahl" min="1" placeholder="Anzahl Personen">
-<textarea id="essen" placeholder="Essenswünsche / Allergien"></textarea>
-<textarea id="musikWunsch" placeholder="Musikwunsch"></textarea>
-<textarea id="nachricht" placeholder="Nachricht"></textarea>
+<input id="mainName">
+<input id="phone">
 
-<button onclick="send()">Absenden</button>
-<button onclick="closeForm()">Schließen</button>
-<p id="status"></p>
+<label id="lblTime"></label>
+<input type="time" id="time" min="13:00">
+
+<input type="number" id="count" min="1" value="1" onchange="buildPersons()">
+
+<div id="persons"></div>
+
+<textarea id="food"></textarea>
+<textarea id="musicWish"></textarea>
+<textarea id="message"></textarea>
+
+<button onclick="sendForm()" id="btnSend"></button>
+<button onclick="closeForm()" id="btnClose"></button>
+
+<p id="formStatus"></p>
 </div>
 </div>
 
 <!-- ADMIN -->
 <div class="admin" id="admin">
-<h2>📊 Gästeliste</h2>
-<h3 id="summe"></h3>
+<h2>📊 Admin – Gästeliste</h2>
+<h3 id="sum"></h3>
 
 <table>
 <thead>
-<tr><th>Name</th><th>Personen</th><th>Zeit</th><th>Aktion</th></tr>
+<tr>
+<th>Hauptname</th>
+<th>Personen</th>
+<th>Zeit</th>
+<th>Details</th>
+<th>Aktion</th>
+</tr>
 </thead>
-<tbody id="list"></tbody>
+<tbody id="adminList"></tbody>
 </table>
 
 <button onclick="logout()">Admin schließen</button>
@@ -197,28 +213,39 @@ const music=document.getElementById("music");
 function openForm(){
  formModal.style.display="flex";
  music.muted=false; music.play();
+ buildPersons();
 }
 function closeForm(){ formModal.style.display="none"; }
 
-async function send(){
+function buildPersons(){
+ const n=Number(document.getElementById("count").value);
+ const box=document.getElementById("persons");
+ box.innerHTML="";
+ for(let i=1;i<=n;i++){
+   box.innerHTML+=`<input class="person" placeholder="${TXT[currentLang].person} ${i}">`;
+ }
+}
+
+async function sendForm(){
+ const personNames=[...document.querySelectorAll(".person")].map(i=>i.value);
  const data={
-  name:name.value,
-  telefon:telefon.value,
-  zeit:zeit.value,
-  anzahl:Number(anzahl.value),
-  essen:essen.value,
-  musik:musikWunsch.value,
-  nachricht:nachricht.value,
-  ts:Date.now()
+   mainName:document.getElementById("mainName").value,
+   phone:document.getElementById("phone").value,
+   time:document.getElementById("time").value,
+   persons:personNames,
+   count:personNames.length,
+   food:document.getElementById("food").value,
+   music:document.getElementById("musicWish").value,
+   message:document.getElementById("message").value,
+   ts:Date.now()
  };
  await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
- status.innerText="✅ Gespeichert";
+ formStatus.innerText="✔ Gespeichert";
 }
 
 /* ADMIN */
 async function adminLogin(){
- const pw=prompt("Admin Passwort:");
- if(pw!=="maria90") return;
+ if(prompt("Admin Passwort")!=="maria90") return;
  invite.style.display="none";
  admin.style.display="block";
  loadAdmin();
@@ -232,24 +259,72 @@ function logout(){
 async function loadAdmin(){
  const res=await fetch(DB+".json");
  const data=await res.json();
- let sum=0;
- list.innerHTML="";
+ let total=0;
+ adminList.innerHTML="";
  for(let id in data){
-  sum+=data[id].anzahl||0;
-  list.innerHTML+=`
-  <tr>
-   <td>${data[id].name}</td>
-   <td>${data[id].anzahl}</td>
-   <td>${data[id].zeit||""}</td>
-   <td><button onclick="del('${id}')">🗑</button></td>
-  </tr>`;
+   total+=data[id].count||0;
+   adminList.innerHTML+=`
+   <tr>
+    <td>${data[id].mainName}</td>
+    <td>${data[id].count}</td>
+    <td>${data[id].time||""}</td>
+    <td>${(data[id].persons||[]).join(", ")}</td>
+    <td><button onclick="del('${id}')">🗑</button></td>
+   </tr>`;
  }
- summe.innerText="Gesamtpersonen: "+sum;
+ sum.innerText="Gesamtpersonen: "+total;
 }
 async function del(id){
  await fetch(`${DB}/${id}.json`,{method:"DELETE"});
  loadAdmin();
 }
+
+/* SPRACHEN */
+let currentLang="de";
+const TXT={
+de:{
+ title:"Liebe Familie und Freunde!",
+ text:`Ein Stern am Himmel und Schatz auf Erden wird 90<br><br>
+ Wir laden herzlich ein, den 90. Geburtstag von Maria Ronczka mit uns zu feiern.<br><br>
+ <b>Wann:</b> Samstag, 11. April 2026, ab 13 Uhr<br>
+ <b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
+ Wir freuen uns auf einen schönen Tag mit Euch.<br>
+ Leider keine Übernachtung möglich.<br>
+ Rückmeldung bitte bis Ende Februar.<br><br>
+ <b>Maria Ronczka mit Familie</b>`,
+ reply:"Rückmeldung geben",
+ form:"Rückmeldung",
+ send:"Absenden",
+ close:"Schließen",
+ person:"Person"
+},
+pl:{
+ title:"Droga Rodzino i Przyjaciele!",
+ text:`Gwiazda na niebie i skarb na ziemi kończy 90 lat<br><br>
+ Zapraszamy serdecznie na 90. urodziny Marii Ronczki.<br><br>
+ <b>Kiedy:</b> Sobota, 11 kwietnia 2026 od 13:00<br>
+ <b>Gdzie:</b> Gasthaus Greskamp, Olfen<br><br>
+ Z radością czekamy na wspólne świętowanie.<br><br>
+ <b>Maria Ronczka z rodziną</b>`,
+ reply:"Odpowiedź",
+ form:"Odpowiedź",
+ send:"Wyślij",
+ close:"Zamknij",
+ person:"Osoba"
+}
+};
+
+function setLang(l){
+ currentLang=l;
+ title.innerHTML=TXT[l].title;
+ inviteText.innerHTML=TXT[l].text;
+ btnReply.innerText=TXT[l].reply;
+ formTitle.innerText=TXT[l].form;
+ btnSend.innerText=TXT[l].send;
+ btnClose.innerText=TXT[l].close;
+ buildPersons();
+}
+setLang("de");
 </script>
 
 </body>

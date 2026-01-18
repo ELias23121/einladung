@@ -13,6 +13,7 @@ body{font-family:'Playfair Display',serif;background:#000;color:#eee;overflow-x:
 /* Hintergrundslideshow */
 #bg{position:fixed;inset:0;z-index:-3}
 .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 60s infinite}
+.slide:first-child{opacity:1} /* erstes Bild sofort sichtbar */
 .slide:nth-child(1){background-image:url("bilder/bild1.jpg")}
 .slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:12s}
 .slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:24s}
@@ -75,7 +76,7 @@ button{padding:10px 22px;font-size:14px;}
 </div>
 <div class="overlay"></div>
 
-<audio id="music" src="0118.mp3" autoplay loop></audio>
+<audio id="music" src="0118.mp3" autoplay loop muted></audio>
 
 <!-- Einladung -->
 <div id="invite">
@@ -207,7 +208,13 @@ buildPersons();
 }
 setLang("de");
 
-function openForm(){formModal.style.display="flex";music.muted=false;music.play();buildPersons();}
+/* Musik sofort möglichst starten */
+window.addEventListener('load',()=>{
+  const music=document.getElementById('music');
+  music.play().catch(()=>{}); // Browser Autoplay blockiert ggf
+});
+
+function openForm(){formModal.style.display="flex";music.muted=false;buildPersons();}
 function closeForm(){formModal.style.display="none";}
 function buildPersons(){persons.innerHTML="";const n=Math.min(parseInt(count.value)||1,5);for(let i=1;i<=n;i++){persons.innerHTML+=`<label>${TXT[currentLang].person} ${i}</label><input class="person">`}}
 async function sendForm(){const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);const phoneVal=phone.value.replace(/\D/g,'');if(!phoneVal){alert("Telefonnummer nur Zahlen!");return;}const data={mainName:mainName.value,phone:phoneVal,time:time.value,count:personsArr.length,persons:personsArr,food:food.value,music:musicWish.value,message:message.value,ts:new Date().toLocaleString()};await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});formStatus.innerText=TXT[currentLang].saved;closeForm();}

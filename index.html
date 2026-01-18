@@ -20,7 +20,7 @@ body{
  color:#f5f5f5;
 }
 
-/* HINTERGRUND */
+/* BACKGROUND */
 #bg{position:fixed;inset:0;z-index:-2}
 .slide{
  position:absolute;inset:0;
@@ -28,7 +28,7 @@ body{
  background-position:center;
  opacity:0;
  animation:fade 60s infinite;
- filter:contrast(1.05) saturate(1.1);
+ filter:contrast(1.08) saturate(1.1);
 }
 .slide:nth-child(1){background-image:url("bilder/bild1.jpg")}
 .slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:12s}
@@ -46,15 +46,15 @@ body{
 .overlay{
  position:fixed;inset:0;
  background:rgba(0,0,0,.55);
- backdrop-filter:blur(1px);
  z-index:-1;
 }
 
+/* CARD */
 .card{
  max-width:900px;
  margin:60px auto;
  padding:50px;
- background:rgba(15,15,15,.82);
+ background:rgba(15,15,15,.85);
  border:1px solid var(--gold);
  box-shadow:0 0 60px rgba(201,178,107,.25);
 }
@@ -87,7 +87,7 @@ button:hover{background:var(--gold);color:#000}
  border:1px solid var(--gold);
  padding:30px;
  width:90%;
- max-width:550px;
+ max-width:560px;
 }
 
 input,textarea{
@@ -98,10 +98,6 @@ input,textarea{
  border:1px solid #333;
  color:white;
  font-family:inherit;
-}
-
-.person{
- margin-bottom:6px;
 }
 
 /* ADMIN */
@@ -148,7 +144,7 @@ footer{
 <h1 id="title"></h1>
 <p id="inviteText"></p>
 
-<button onclick="openForm()" id="btnReply"></button>
+<button id="btnReply" onclick="openForm()"></button>
 
 <select onchange="setLang(this.value)" style="display:block;margin:auto">
  <option value="de">Deutsch</option>
@@ -175,8 +171,8 @@ footer{
 <textarea id="musicWish"></textarea>
 <textarea id="message"></textarea>
 
-<button onclick="sendForm()" id="btnSend"></button>
-<button onclick="closeForm()" id="btnClose"></button>
+<button id="btnSend" onclick="sendForm()"></button>
+<button id="btnClose" onclick="closeForm()"></button>
 
 <p id="formStatus"></p>
 </div>
@@ -193,7 +189,7 @@ footer{
 <th>Hauptname</th>
 <th>Personen</th>
 <th>Zeit</th>
-<th>Details</th>
+<th>Namen</th>
 <th>Aktion</th>
 </tr>
 </thead>
@@ -207,7 +203,7 @@ footer{
 
 <script>
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
-const music=document.getElementById("music");
+let currentLang="de";
 
 /* FORM */
 function openForm(){
@@ -218,29 +214,29 @@ function openForm(){
 function closeForm(){ formModal.style.display="none"; }
 
 function buildPersons(){
- const n=Number(document.getElementById("count").value);
- const box=document.getElementById("persons");
- box.innerHTML="";
+ const n=Number(count.value);
+ persons.innerHTML="";
  for(let i=1;i<=n;i++){
-   box.innerHTML+=`<input class="person" placeholder="${TXT[currentLang].person} ${i}">`;
+   persons.innerHTML+=`<input class="person" placeholder="${TXT[currentLang].person} ${i}">`;
  }
 }
 
 async function sendForm(){
- const personNames=[...document.querySelectorAll(".person")].map(i=>i.value);
+ const names=[...document.querySelectorAll(".person")].map(i=>i.value);
  const data={
-   mainName:document.getElementById("mainName").value,
-   phone:document.getElementById("phone").value,
-   time:document.getElementById("time").value,
-   persons:personNames,
-   count:personNames.length,
-   food:document.getElementById("food").value,
-   music:document.getElementById("musicWish").value,
-   message:document.getElementById("message").value,
-   ts:Date.now()
+  mainName:mainName.value,
+  phone:phone.value,
+  time:time.value,
+  persons:names,
+  count:names.length,
+  food:food.value,
+  music:musicWish.value,
+  message:message.value,
+  ts:Date.now()
  };
  await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
- formStatus.innerText="✔ Gespeichert";
+ formStatus.innerText=TXT[currentLang].saved;
+ closeForm();
 }
 
 /* ADMIN */
@@ -250,7 +246,6 @@ async function adminLogin(){
  admin.style.display="block";
  loadAdmin();
 }
-
 function logout(){
  admin.style.display="none";
  invite.style.display="block";
@@ -262,40 +257,60 @@ async function loadAdmin(){
  let total=0;
  adminList.innerHTML="";
  for(let id in data){
-   total+=data[id].count||0;
-   adminList.innerHTML+=`
-   <tr>
-    <td>${data[id].mainName}</td>
-    <td>${data[id].count}</td>
-    <td>${data[id].time||""}</td>
-    <td>${(data[id].persons||[]).join(", ")}</td>
-    <td><button onclick="del('${id}')">🗑</button></td>
-   </tr>`;
+  total+=data[id].count||0;
+  adminList.innerHTML+=`
+  <tr id="row-${id}">
+   <td contenteditable>${data[id].mainName}</td>
+   <td contenteditable>${data[id].count}</td>
+   <td contenteditable>${data[id].time||""}</td>
+   <td contenteditable>${(data[id].persons||[]).join(", ")}</td>
+   <td>
+    <button onclick="save('${id}')">💾</button>
+    <button onclick="del('${id}')">🗑</button>
+   </td>
+  </tr>`;
  }
  sum.innerText="Gesamtpersonen: "+total;
 }
+
+async function save(id){
+ const row=document.getElementById("row-"+id).children;
+ const persons=row[3].innerText.split(",").map(p=>p.trim());
+ await fetch(`${DB}/${id}.json`,{
+  method:"PATCH",
+  body:JSON.stringify({
+   mainName:row[0].innerText,
+   count:Number(row[1].innerText),
+   time:row[2].innerText,
+   persons:persons
+  })
+ });
+ loadAdmin();
+}
+
 async function del(id){
+ if(!confirm("Eintrag löschen?")) return;
  await fetch(`${DB}/${id}.json`,{method:"DELETE"});
  loadAdmin();
 }
 
-/* SPRACHEN */
-let currentLang="de";
+/* TEXT */
 const TXT={
 de:{
  title:"Liebe Familie und Freunde!",
  text:`Ein Stern am Himmel und Schatz auf Erden wird 90<br><br>
  Wir laden herzlich ein, den 90. Geburtstag von Maria Ronczka mit uns zu feiern.<br><br>
- <b>Wann:</b> Samstag, 11. April 2026, ab 13 Uhr<br>
+ <b>Wann:</b> Samstag, den 11. April 2026, ab 13 Uhr<br>
  <b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
  Wir freuen uns auf einen schönen Tag mit Euch.<br>
- Leider keine Übernachtung möglich.<br>
+ Leider können wir keine Übernachtung anbieten.<br>
  Rückmeldung bitte bis Ende Februar.<br><br>
  <b>Maria Ronczka mit Familie</b>`,
  reply:"Rückmeldung geben",
  form:"Rückmeldung",
  send:"Absenden",
  close:"Schließen",
+ saved:"✔ Gespeichert",
  person:"Person"
 },
 pl:{
@@ -304,12 +319,12 @@ pl:{
  Zapraszamy serdecznie na 90. urodziny Marii Ronczki.<br><br>
  <b>Kiedy:</b> Sobota, 11 kwietnia 2026 od 13:00<br>
  <b>Gdzie:</b> Gasthaus Greskamp, Olfen<br><br>
- Z radością czekamy na wspólne świętowanie.<br><br>
  <b>Maria Ronczka z rodziną</b>`,
  reply:"Odpowiedź",
  form:"Odpowiedź",
  send:"Wyślij",
  close:"Zamknij",
+ saved:"✔ Zapisano",
  person:"Osoba"
 }
 };
@@ -322,6 +337,12 @@ function setLang(l){
  formTitle.innerText=TXT[l].form;
  btnSend.innerText=TXT[l].send;
  btnClose.innerText=TXT[l].close;
+ lblTime.innerText=l==="de"?"Ankunft (ab 13 Uhr)":"Godzina przybycia (od 13:00)";
+ mainName.placeholder=l==="de"?"Name":"Imię";
+ phone.placeholder=l==="de"?"Telefon":"Telefon";
+ food.placeholder=l==="de"?"Essenswünsche / Allergien":"Uwagi dotyczące jedzenia";
+ musicWish.placeholder=l==="de"?"Musikwunsch":"Życzenie muzyczne";
+ message.placeholder=l==="de"?"Nachricht":"Wiadomość";
  buildPersons();
 }
 setLang("de");

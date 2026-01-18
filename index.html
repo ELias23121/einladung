@@ -8,123 +8,72 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-:root{
- --gold:#c9b26b;
- --dark:#0b0b0b;
-}
-
+:root{--gold:#c9b26b}
 body{
- margin:0;
- font-family:'Playfair Display',serif;
- background:#000;
- color:#f5f5f5;
+ margin:0;font-family:'Playfair Display',serif;
+ background:#000;color:#eee;
 }
-
-/* BACKGROUND */
 #bg{position:fixed;inset:0;z-index:-2}
 .slide{
  position:absolute;inset:0;
  background-size:cover;
  background-position:center;
- opacity:0;
- animation:fade 60s infinite;
- filter:contrast(1.08) saturate(1.1);
+ opacity:0;animation:fade 60s infinite;
 }
 .slide:nth-child(1){background-image:url("bilder/bild1.jpg")}
 .slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:12s}
 .slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:24s}
 .slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:36s}
 .slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:48s}
-
 @keyframes fade{
- 0%{opacity:0}
- 8%{opacity:1}
- 22%{opacity:1}
- 30%{opacity:0}
+ 0%{opacity:0}8%{opacity:1}22%{opacity:1}30%{opacity:0}
 }
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55)}
 
-.overlay{
- position:fixed;inset:0;
- background:rgba(0,0,0,.55);
- z-index:-1;
-}
-
-/* CARD */
 .card{
- max-width:900px;
- margin:60px auto;
- padding:50px;
+ max-width:900px;margin:60px auto;padding:50px;
  background:rgba(15,15,15,.85);
  border:1px solid var(--gold);
- box-shadow:0 0 60px rgba(201,178,107,.25);
+ box-shadow:0 0 50px rgba(201,178,107,.25);
 }
 
-h1{color:var(--gold);text-align:center}
+h1,h2{color:var(--gold);text-align:center}
 p{text-align:center;line-height:1.8;font-size:18px}
 
 button{
- background:none;
- border:1px solid var(--gold);
- color:var(--gold);
- padding:14px 32px;
- font-size:18px;
- cursor:pointer;
- display:block;
- margin:25px auto;
+ background:none;border:1px solid var(--gold);
+ color:var(--gold);padding:12px 30px;
+ font-size:16px;cursor:pointer;
 }
 button:hover{background:var(--gold);color:#000}
 
-/* MODAL */
+label{display:block;margin-top:12px;font-size:14px;opacity:.8}
+input,textarea{
+ width:100%;padding:10px;margin-top:4px;
+ background:#1a1a1a;border:1px solid #444;color:#fff;
+}
+
 .modal{
- position:fixed;inset:0;
- display:none;
- justify-content:center;
- align-items:center;
+ position:fixed;inset:0;display:none;
+ justify-content:center;align-items:center;
  background:rgba(0,0,0,.85);
 }
 .modal-box{
- background:#111;
- border:1px solid var(--gold);
- padding:30px;
- width:90%;
- max-width:560px;
+ background:#111;border:1px solid var(--gold);
+ padding:30px;width:90%;max-width:600px;
 }
 
-input,textarea{
- width:100%;
- padding:10px;
- margin-bottom:10px;
- background:#1a1a1a;
- border:1px solid #333;
- color:white;
- font-family:inherit;
-}
-
-/* ADMIN */
 .admin{
- display:none;
- max-width:1100px;
- margin:40px auto;
- padding:30px;
- background:#111;
- border:1px solid var(--gold);
-}
-table{
- width:100%;
- border-collapse:collapse;
-}
-th,td{
- border:1px solid #444;
- padding:8px;
- vertical-align:top;
+ display:none;max-width:1200px;
+ margin:40px auto;padding:30px;
+ background:#111;border:1px solid var(--gold);
 }
 
-footer{
- text-align:center;
- opacity:.5;
- margin:40px;
- cursor:pointer;
-}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{border:1px solid #444;padding:6px;vertical-align:top}
+
+footer{text-align:center;opacity:.5;margin:30px;cursor:pointer}
+canvas{background:#0e0e0e;margin-top:20px}
 </style>
 </head>
 
@@ -139,41 +88,51 @@ footer{
 
 <audio id="music" src="0118.mp3" autoplay loop muted></audio>
 
-<!-- EINLADUNG -->
 <div class="card" id="invite">
-<h1 id="title"></h1>
-<p id="inviteText"></p>
+<h1>Liebe Familie und Freunde!</h1>
+<p>
+Ein Stern am Himmel und Schatz auf Erden wird 90<br><br>
+Wir laden herzlich ein, den 90. Geburtstag von Maria Ronczka zu feiern.<br><br>
+<b>Wann:</b> Samstag, 11. April 2026 ab 13 Uhr<br>
+<b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
+Rückmeldung bitte bis Ende Februar<br><br>
+<b>Maria Ronczka mit Familie</b>
+</p>
 
-<button id="btnReply" onclick="openForm()"></button>
-
-<select onchange="setLang(this.value)" style="display:block;margin:auto">
- <option value="de">Deutsch</option>
- <option value="pl">Polski</option>
-</select>
+<button onclick="openForm()">Rückmeldung geben</button>
 </div>
 
 <!-- FORMULAR -->
 <div class="modal" id="formModal">
 <div class="modal-box">
-<h3 id="formTitle"></h3>
+<h2>Rückmeldung</h2>
 
+<label>Ihr Name</label>
 <input id="mainName">
+
+<label>Telefonnummer</label>
 <input id="phone">
 
-<label id="lblTime"></label>
+<label>Ankunftszeit (ab 13:00)</label>
 <input type="time" id="time" min="13:00">
 
+<label>Anzahl der Personen</label>
 <input type="number" id="count" min="1" value="1" onchange="buildPersons()">
 
 <div id="persons"></div>
 
+<label>Essenswünsche / Allergien</label>
 <textarea id="food"></textarea>
+
+<label>Musikwunsch (optional)</label>
 <textarea id="musicWish"></textarea>
+
+<label>Nachricht</label>
 <textarea id="message"></textarea>
 
-<button id="btnSend" onclick="sendForm()"></button>
-<button id="btnClose" onclick="closeForm()"></button>
-
+<br>
+<button onclick="sendForm()">Absenden</button>
+<button onclick="closeForm()">Schließen</button>
 <p id="formStatus"></p>
 </div>
 </div>
@@ -183,13 +142,14 @@ footer{
 <h2>📊 Admin – Gästeliste</h2>
 <h3 id="sum"></h3>
 
+<canvas id="chart" width="1000" height="300"></canvas>
+
 <table>
 <thead>
 <tr>
-<th>Hauptname</th>
-<th>Personen</th>
-<th>Zeit</th>
-<th>Namen</th>
+<th>Name</th><th>Tel</th><th>Zeit</th>
+<th>Anz.</th><th>Personen</th>
+<th>Essen</th><th>Musik</th><th>Nachricht</th>
 <th>Aktion</th>
 </tr>
 </thead>
@@ -203,49 +163,49 @@ footer{
 
 <script>
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
-let currentLang="de";
 
-/* FORM */
 function openForm(){
  formModal.style.display="flex";
- music.muted=false; music.play();
+ music.muted=false;music.play();
  buildPersons();
 }
-function closeForm(){ formModal.style.display="none"; }
+function closeForm(){formModal.style.display="none"}
 
 function buildPersons(){
- const n=Number(count.value);
  persons.innerHTML="";
- for(let i=1;i<=n;i++){
-   persons.innerHTML+=`<input class="person" placeholder="${TXT[currentLang].person} ${i}">`;
+ for(let i=1;i<=count.value;i++){
+  persons.innerHTML+=`
+   <label>Person ${i}</label>
+   <input class="person">
+  `;
  }
 }
 
 async function sendForm(){
- const names=[...document.querySelectorAll(".person")].map(i=>i.value);
+ const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);
  const data={
   mainName:mainName.value,
   phone:phone.value,
   time:time.value,
-  persons:names,
-  count:names.length,
+  count:personsArr.length,
+  persons:personsArr,
   food:food.value,
   music:musicWish.value,
   message:message.value,
-  ts:Date.now()
+  ts:new Date().toLocaleString()
  };
  await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
- formStatus.innerText=TXT[currentLang].saved;
+ formStatus.innerText="✔ Gespeichert";
  closeForm();
 }
 
-/* ADMIN */
 async function adminLogin(){
- if(prompt("Admin Passwort")!=="maria90") return;
+ if(prompt("Admin Passwort")!=="maria90")return;
  invite.style.display="none";
  admin.style.display="block";
  loadAdmin();
 }
+
 function logout(){
  admin.style.display="none";
  invite.style.display="block";
@@ -254,99 +214,45 @@ function logout(){
 async function loadAdmin(){
  const res=await fetch(DB+".json");
  const data=await res.json();
- let total=0;
+ let total=0,values=[];
  adminList.innerHTML="";
  for(let id in data){
-  total+=data[id].count||0;
+  const d=data[id];
+  total+=d.count;
+  values.push(d.count);
   adminList.innerHTML+=`
-  <tr id="row-${id}">
-   <td contenteditable>${data[id].mainName}</td>
-   <td contenteditable>${data[id].count}</td>
-   <td contenteditable>${data[id].time||""}</td>
-   <td contenteditable>${(data[id].persons||[]).join(", ")}</td>
-   <td>
-    <button onclick="save('${id}')">💾</button>
-    <button onclick="del('${id}')">🗑</button>
-   </td>
+  <tr>
+   <td>${d.mainName}</td>
+   <td>${d.phone}</td>
+   <td>${d.time}</td>
+   <td>${d.count}</td>
+   <td>${d.persons.join(", ")}</td>
+   <td>${d.food}</td>
+   <td>${d.music}</td>
+   <td>${d.message}</td>
+   <td><button onclick="del('${id}')">🗑</button></td>
   </tr>`;
  }
  sum.innerText="Gesamtpersonen: "+total;
-}
-
-async function save(id){
- const row=document.getElementById("row-"+id).children;
- const persons=row[3].innerText.split(",").map(p=>p.trim());
- await fetch(`${DB}/${id}.json`,{
-  method:"PATCH",
-  body:JSON.stringify({
-   mainName:row[0].innerText,
-   count:Number(row[1].innerText),
-   time:row[2].innerText,
-   persons:persons
-  })
- });
- loadAdmin();
+ drawChart(values);
 }
 
 async function del(id){
- if(!confirm("Eintrag löschen?")) return;
- await fetch(`${DB}/${id}.json`,{method:"DELETE"});
+ if(!confirm("Eintrag löschen?"))return;
+ await fetch(DB+"/"+id+".json",{method:"DELETE"});
  loadAdmin();
 }
 
-/* TEXT */
-const TXT={
-de:{
- title:"Liebe Familie und Freunde!",
- text:`Ein Stern am Himmel und Schatz auf Erden wird 90<br><br>
- Wir laden herzlich ein, den 90. Geburtstag von Maria Ronczka mit uns zu feiern.<br><br>
- <b>Wann:</b> Samstag, den 11. April 2026, ab 13 Uhr<br>
- <b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
- Wir freuen uns auf einen schönen Tag mit Euch.<br>
- Leider können wir keine Übernachtung anbieten.<br>
- Rückmeldung bitte bis Ende Februar.<br><br>
- <b>Maria Ronczka mit Familie</b>`,
- reply:"Rückmeldung geben",
- form:"Rückmeldung",
- send:"Absenden",
- close:"Schließen",
- saved:"✔ Gespeichert",
- person:"Person"
-},
-pl:{
- title:"Droga Rodzino i Przyjaciele!",
- text:`Gwiazda na niebie i skarb na ziemi kończy 90 lat<br><br>
- Zapraszamy serdecznie na 90. urodziny Marii Ronczki.<br><br>
- <b>Kiedy:</b> Sobota, 11 kwietnia 2026 od 13:00<br>
- <b>Gdzie:</b> Gasthaus Greskamp, Olfen<br><br>
- <b>Maria Ronczka z rodziną</b>`,
- reply:"Odpowiedź",
- form:"Odpowiedź",
- send:"Wyślij",
- close:"Zamknij",
- saved:"✔ Zapisano",
- person:"Osoba"
+function drawChart(values){
+ const c=chart.getContext("2d");
+ c.clearRect(0,0,1000,300);
+ const max=Math.max(...values,1);
+ values.forEach((v,i)=>{
+  const h=(v/max)*250;
+  c.fillStyle="#c9b26b";
+  c.fillRect(i*50+20,280-h,30,h);
+ });
 }
-};
-
-function setLang(l){
- currentLang=l;
- title.innerHTML=TXT[l].title;
- inviteText.innerHTML=TXT[l].text;
- btnReply.innerText=TXT[l].reply;
- formTitle.innerText=TXT[l].form;
- btnSend.innerText=TXT[l].send;
- btnClose.innerText=TXT[l].close;
- lblTime.innerText=l==="de"?"Ankunft (ab 13 Uhr)":"Godzina przybycia (od 13:00)";
- mainName.placeholder=l==="de"?"Name":"Imię";
- phone.placeholder=l==="de"?"Telefon":"Telefon";
- food.placeholder=l==="de"?"Essenswünsche / Allergien":"Uwagi dotyczące jedzenia";
- musicWish.placeholder=l==="de"?"Musikwunsch":"Życzenie muzyczne";
- message.placeholder=l==="de"?"Nachricht":"Wiadomość";
- buildPersons();
-}
-setLang("de");
 </script>
-
 </body>
 </html>

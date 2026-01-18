@@ -6,62 +6,68 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#c9b26b;--panel:#111}
+:root{--gold:#c9b26b;--panel:#fff;--text:#000}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Playfair Display',serif;background:#000;color:var(--gold);overflow-x:hidden}
+body{font-family:'Playfair Display',serif;background:#000;color:var(--text);overflow-x:hidden}
 
 /* Hintergrundslideshow */
 #bg{position:fixed;inset:0;z-index:-3}
-.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 60s infinite}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 60s infinite; transform: scale(1); transition: transform 60s linear}
 .slide:first-child{opacity:1}
-.slide:nth-child(1){background-image:url("bilder/bild1.jpg")}
+.slide:nth-child(1){background-image:url("bilder/bild1.jpg"); animation:zoomfade1 60s infinite}
 .slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:12s}
 .slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:24s}
 .slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:36s}
 .slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:48s}
+
 @keyframes fade{0%{opacity:0}8%{opacity:1}22%{opacity:1}30%{opacity:0}}
+@keyframes zoomfade1{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 
-/* Overlay sehr transparent */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.05);z-index:-2;pointer-events:none}
+/* Overlay für bessere Lesbarkeit */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.2);z-index:-2;pointer-events:none}
 
-/* Einladungstext */
-#invite{position:relative;z-index:2;text-align:center;padding:60px 20px;}
-#invite h1{color:var(--gold);font-size:36px;margin-bottom:20px;text-shadow:1px 1px 6px #000;}
-#invite p{font-size:18px;line-height:1.7;text-shadow:1px 1px 4px #000;margin-bottom:30px;}
+/* Einladungstext Box */
+#invite{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:40px 20px;
+    background: rgba(255,255,255,0.85); /* Weißer, transparenter Hintergrund für schwarzen Text */
+    max-width: 800px;
+    margin: 40px auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+/* SCHRIFTGRÖSSE & FARBE */
+#invite h1{color:var(--text); font-size: 42px; margin-bottom: 25px; font-weight: 600;}
+#invite p{font-size: 22px; line-height: 1.6; color: var(--text); margin-bottom: 30px; font-weight: 400;}
 
 /* Buttons */
-button{background:none;border:1px solid var(--gold);color:var(--gold);padding:12px 28px;font-size:16px;cursor:pointer;transition:.3s}
-button:hover{background:var(--gold);color:#000;box-shadow:0 0 15px rgba(201,178,107,.6)}
+button{background:#000; border:1px solid #000; color:#fff; padding:14px 32px; font-size:18px; cursor:pointer; transition:.3s; border-radius: 5px;}
+button:hover{background:var(--gold); color:#000; border-color: var(--gold);}
 
 /* Formular */
-label{display:block;margin-top:12px;font-size:14px;opacity:.85}
-input,textarea,select{width:100%;padding:10px;margin-top:6px;background:#1a1a1a;border:1px solid #444;color:var(--gold);font-family:inherit}
-
-/* Modal */
 .modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.85);z-index:5}
-.modal-box{background:var(--panel);border:1px solid var(--gold);padding:25px;width:92%;max-width:500px;max-height:90vh;overflow:auto}
+.modal-box{background:#fff; border:1px solid var(--gold); padding:25px; width:92%; max-width:500px; max-height:90vh; overflow:auto; color: #000;}
+label{display:block; margin-top:12px; font-size:14px; font-weight: bold;}
+input,textarea,select{width:100%; padding:10px; margin-top:6px; background:#f9f9f9; border:1px solid #ccc; color:#000; font-family:inherit}
 
-/* Admin */
-.admin{display:none;position:relative;z-index:2;max-width:1000px;margin:30px auto;padding:20px;background:var(--panel);border:1px solid var(--gold)}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border:1px solid #444;padding:6px;vertical-align:top;color:var(--gold)}
-th{background:#1a1a1a}
-canvas{display:block;margin:20px auto;background:#0e0e0e;border:1px solid #333;max-width:100%}
+/* Admin Bereich */
+.admin{display:none; position:relative; z-index:10; max-width:1100px; margin:20px auto; padding:20px; background:#fff; color: #000; border:2px solid var(--gold); overflow-x: auto;}
+table{width:100%; border-collapse:collapse; font-size:13px; margin-top: 15px;}
+th,td{border:1px solid #ddd; padding:8px; text-align: left;}
+th{background:#eee;}
+canvas{display:block; margin:20px auto; background:#f0f0f0; border:1px solid #ccc; max-width:100%}
 
 /* Footer */
-footer{position:relative;z-index:2;text-align:center;opacity:.7;margin:10px;}
-
-/* Slideshow leichter Zoom */
-.slide{transform: scale(1);transition: transform 60s linear}
-.slide:nth-child(1){animation:zoomfade1 60s infinite}
-@keyframes zoomfade1{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+footer{position:relative; z-index:2; text-align:center; opacity:.7; margin:20px; color: #fff;}
+.admin-trigger{background: none; border: none; color: inherit; font-size: 12px; cursor: pointer; text-decoration: underline;}
 
 /* Responsive */
 @media(max-width:768px){
-#invite h1{font-size:28px;}
-#invite p{font-size:16px;}
-button{padding:10px 22px;font-size:14px;}
-.modal-box{width:95%;padding:20px;}
+    #invite{margin: 20px; padding: 25px 15px;}
+    #invite h1{font-size:32px;}
+    #invite p{font-size:18px;}
 }
 </style>
 </head>
@@ -79,72 +85,65 @@ button{padding:10px 22px;font-size:14px;}
 <audio id="music" src="0118.mp3" autoplay loop muted></audio>
 
 <div id="invite">
-<h1 id="title"></h1>
-<p id="inviteText"></p>
-<button id="btnReply" onclick="openForm()"></button>
-<select id="langSelect" onchange="setLang(this.value)" style="margin-top:20px">
-<option value="de">Deutsch</option>
-<option value="pl">Polski</option>
-</select>
+    <h1 id="title"></h1>
+    <p id="inviteText"></p>
+    <button id="btnReply" onclick="openForm()"></button>
+    <br>
+    <select id="langSelect" onchange="setLang(this.value)" style="margin-top:25px; width: auto; padding: 5px 15px;">
+        <option value="de">Deutsch</option>
+        <option value="pl">Polski</option>
+    </select>
 </div>
 
-<!-- Formular -->
 <div class="modal" id="formModal">
-<div class="modal-box">
-<h2 id="formTitle"></h2>
-
-<label id="lblName"></label>
-<input id="mainName">
-
-<label id="lblPhone"></label>
-<input id="phone" pattern="[0-9]*" inputmode="numeric">
-
-<label id="lblTime"></label>
-<input type="time" id="time" min="13:00">
-
-<label id="lblCount"></label>
-<input type="number" id="count" min="1" max="5" value="1" onchange="buildPersons()">
-
-<div id="persons"></div>
-
-<label id="lblMusic"></label>
-<textarea id="musicWish"></textarea>
-
-<label id="lblMessage"></label>
-<textarea id="message"></textarea>
-
-<br>
-<button id="btnSend" onclick="sendForm()"></button>
-<button id="btnClose" onclick="closeForm()"></button>
-<p id="formStatus"></p>
-</div>
+    <div class="modal-box">
+        <h2 id="formTitle"></h2>
+        <label id="lblName"></label>
+        <input id="mainName">
+        <label id="lblPhone"></label>
+        <input id="phone" type="tel">
+        <label id="lblTime"></label>
+        <input type="time" id="time" value="13:00">
+        <label id="lblCount"></label>
+        <input type="number" id="count" min="1" max="10" value="1" onchange="buildPersons()">
+        <div id="persons"></div>
+        <label id="lblMusic"></label>
+        <textarea id="musicWish"></textarea>
+        <label id="lblMessage"></label>
+        <textarea id="message"></textarea>
+        <br><br>
+        <button id="btnSend" onclick="sendForm()"></button>
+        <button id="btnClose" onclick="closeForm()" style="background: #666;"></button>
+        <p id="formStatus" style="margin-top:10px; color: green; font-weight: bold;"></p>
+    </div>
 </div>
 
-<!-- Admin -->
 <div class="admin" id="admin">
-<h2>📊 Admin – Gästeliste</h2>
-<h3 id="sum"></h3>
-<canvas id="chart" width="1100" height="300"></canvas>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Telefon</th>
-<th>Zeit</th>
-<th>Anz.</th>
-<th>Personen</th>
-<th>Musik</th>
-<th>Nachricht</th>
-<th>Aktion</th>
-</tr>
-</thead>
-<tbody id="adminList"></tbody>
-</table>
-<br>
-<button onclick="logout()">Admin schließen</button>
+    <h2>📊 Admin – Gästeliste</h2>
+    <h3 id="sum"></h3>
+    <canvas id="chart" width="1000" height="250"></canvas>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Tel</th>
+                <th>Zeit</th>
+                <th>Anz.</th>
+                <th>Personen</th>
+                <th>Musik</th>
+                <th>Nachricht</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody id="adminList"></tbody>
+    </table>
+    <br>
+    <button onclick="logout()">Admin schließen</button>
 </div>
 
-<footer>Erstellt von Elias</footer>
+<footer>
+    Erstellt von Elias | <button class="admin-trigger" onclick="adminLogin()">Admin Login</button>
+</footer>
 
 <script>
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
@@ -157,69 +156,169 @@ Wir laden herzlich ein, den 90-sten Geburtstag von <b>Maria Ronczka</b> mit uns 
 <b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
 Wir freuen uns auf einen schönen Tag mit Euch.<br>
 Leider können wir keine Übernachtung anbieten.<br>
-Rückmeldung bitte bis Ende Februar.<br><br>
-<b>Herzliche Grüße, Familie Ronczka</b>`,
-reply:"Rückmeldung geben",formTitle:"Rückmeldung",
-replyBtnSend:"Absenden",replyBtnClose:"Schließen",saved:"✔ Gespeichert",
-person:"Person",lblName:"Ihr Name",lblPhone:"Telefonnummer",
-lblTime:"Ankunft (ab 13 Uhr)",lblCount:"Anzahl Personen",
-lblMusic:"Musikwunsch (optional)",lblMessage:"Nachricht",
-adminPw:"Admin Passwort",total:"Gesamtpersonen:",delConfirm:"Eintrag löschen?"
+Rückmeldung bitte bis Ende Februar.`,
+reply:"Jetzt Rückmeldung geben",formTitle:"Anmeldung",
+replyBtnSend:"Absenden",replyBtnClose:"Abbrechen",saved:"✔ Erfolgreich gesendet!",
+person:"Name Gast",lblName:"Dein Name",lblPhone:"Telefonnummer",
+lblTime:"Ankunft (geplant)",lblCount:"Anzahl der Personen insgesamt",
+lblMusic:"Musikwunsch (optional)",lblMessage:"Nachricht an uns",
+adminPw:"Passwort eingeben:",total:"Gäste insgesamt:",delConfirm:"Eintrag wirklich löschen?"
 },
 pl:{title:"Droga Rodzino i Przyjaciele!",inviteText:`Gwiazda na niebie i skarb na ziemi kończy 90 lat.<br><br>
-Serdecznie zapraszamy na 90-sten urodziny <b>Maria Ronczka</b>!<br><br>
+Serdecznie zapraszamy na 90-te urodziny <b>Marii Ronczka</b>!<br><br>
 <b>Kiedy:</b> Sobota, 11 kwietnia 2026, od 13:00<br>
 <b>Gdzie:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
 Cieszymy się na wspólny piękny dzień.<br>
 Niestety nie możemy zaoferować noclegu.<br>
-Prosimy o odpowiedź do końca lutego.<br><br>
-<b>Pozdrawiamy, Familie</b>`,
-reply:"Odpowiedź",formTitle:"Odpowiedź",
-replyBtnSend:"Wyślij",replyBtnClose:"Zamknij",saved:"✔ Zapisano",
-person:"Osoba",lblName:"Twoje imię",lblPhone:"Telefon",
-lblTime:"Godzina przybycia (od 13:00)",lblCount:"Liczba osób",
-lblMusic:"Życzenie muzyczne (opcjonalnie)",lblMessage:"Wiadomość",
-adminPw:"Hasło admina",total:"Liczba osób:",delConfirm:"Usunąć wpis?"
+Prosimy o odpowiedź do końca lutego.`,
+reply:"Potwierdź przybycie",formTitle:"Odpowiedź",
+replyBtnSend:"Wyślij",replyBtnClose:"Zamknij",saved:"✔ Zapisano pomyślnie!",
+person:"Imię gościa",lblName:"Twoje imię",lblPhone:"Telefon",
+lblTime:"Godzina przybycia",lblCount:"Liczba osób",
+lblMusic:"Życzenie muzyczne",lblMessage:"Wiadomość",
+adminPw:"Hasło:",total:"Suma osób:",delConfirm:"Usunąć wpis?"
 }
 };
 
 function setLang(l){
-currentLang=l;
-title.innerHTML=TXT[l].title;
-inviteText.innerHTML=TXT[l].inviteText;
-btnReply.innerHTML=TXT[l].reply;
-formTitle.innerHTML=TXT[l].formTitle;
-lblName.innerHTML=TXT[l].lblName;
-lblPhone.innerHTML=TXT[l].lblPhone;
-lblTime.innerHTML=TXT[l].lblTime;
-lblCount.innerHTML=TXT[l].lblCount;
-lblMusic.innerHTML=TXT[l].lblMusic;
-lblMessage.innerHTML=TXT[l].lblMessage;
-btnSend.innerText = TXT[l].replyBtnSend;
-btnClose.innerText = TXT[l].replyBtnClose;
-buildPersons();
+    currentLang=l;
+    title.innerHTML=TXT[l].title;
+    inviteText.innerHTML=TXT[l].inviteText;
+    btnReply.innerHTML=TXT[l].reply;
+    formTitle.innerHTML=TXT[l].formTitle;
+    lblName.innerHTML=TXT[l].lblName;
+    lblPhone.innerHTML=TXT[l].lblPhone;
+    lblTime.innerHTML=TXT[l].lblTime;
+    lblCount.innerHTML=TXT[l].lblCount;
+    lblMusic.innerHTML=TXT[l].lblMusic;
+    lblMessage.innerHTML=TXT[l].lblMessage;
+    btnSend.innerText = TXT[l].replyBtnSend;
+    btnClose.innerText = TXT[l].replyBtnClose;
+    buildPersons();
 }
 setLang("de");
 
-/* Musik auf Mobilgeräten so gut wie möglich starten */
 window.addEventListener('load', ()=>{
-  const music=document.getElementById('music');
-  music.muted=true;
-  music.play().catch(()=>{});
-  document.body.addEventListener('click',()=>{music.muted=false;music.play();},{once:true});
+    const music=document.getElementById('music');
+    document.body.addEventListener('click',()=>{music.muted=false; music.play();},{once:true});
 });
 
-function openForm(){formModal.style.display="flex";buildPersons();}
-function closeForm(){formModal.style.display="none";}
-function buildPersons(){persons.innerHTML="";const n=Math.min(parseInt(count.value)||1,5);for(let i=1;i<=n;i++){persons.innerHTML+=`<label>${TXT[currentLang].person} ${i}</label><input class="person">`}}
-async function sendForm(){const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);const phoneVal=phone.value.replace(/\D/g,'');if(!phoneVal){alert("Telefonnummer nur Zahlen!");return;}const data={mainName:mainName.value,phone:phoneVal,time:time.value,count:personsArr.length,persons:personsArr,music:musicWish.value,message:message.value,ts:new Date().toLocaleString()};await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});formStatus.innerText=TXT[currentLang].saved;closeForm();}
+function openForm(){formModal.style.display="flex"; buildPersons();}
+function closeForm(){formModal.style.display="none"; formStatus.innerText="";}
 
-async function adminLogin(){if(prompt(TXT[currentLang].adminPw)!=="maria90")return;invite.style.display="none";admin.style.display="block";loadAdmin();}
-function logout(){admin.style.display="none";invite.style.display="block";}
-async function loadAdmin(){const res=await fetch(DB+".json");const data=await res.json();let total=0,values=[];adminList.innerHTML="";for(const id in data){const d=data[id];total+=d.count;values.push(d.count);adminList.innerHTML+=`<tr><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`}sum.innerText=TXT[currentLang].total+" "+total;drawChart(values);}
-async function saveRow(id){const row=document.querySelector(`#adminList tr:nth-child(${Array.from(adminList.children).findIndex(r=>r==document.getElementById("adminList").children[id])+1})`);const tds=row.children;const persons=tds[4].innerText.split(",").map(p=>p.trim());const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});loadAdmin();}
-async function del(id){if(!confirm(TXT[currentLang].delConfirm))return;await fetch(DB+"/"+id+".json",{method:"DELETE"});loadAdmin();}
-function drawChart(values){const ctx=chart.getContext("2d");ctx.clearRect(0,0,chart.width,chart.height);const max=Math.max(...values,1);values.forEach((v,i)=>{const h=(v/max)*250;ctx.fillStyle="#c9b26b";ctx.fillRect(i*50+20,280-h,30,h);});}
+function buildPersons(){
+    persons.innerHTML="";
+    const n=Math.min(parseInt(count.value)||1,10);
+    for(let i=1;i<=n;i++){
+        persons.innerHTML+=`<label>${TXT[currentLang].person} ${i}</label><input class="person-input" placeholder="Name">`;
+    }
+}
+
+async function sendForm(){
+    const pInputs = document.querySelectorAll(".person-input");
+    const personsArr = Array.from(pInputs).map(input => input.value).filter(v => v !== "");
+    
+    const data={
+        mainName: mainName.value,
+        phone: phone.value,
+        time: time.value,
+        count: personsArr.length || 1,
+        persons: personsArr,
+        music: musicWish.value,
+        message: message.value,
+        ts: new Date().toLocaleString()
+    };
+    
+    if(!data.mainName) { alert("Bitte Namen angeben"); return; }
+
+    try {
+        await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
+        formStatus.innerText=TXT[currentLang].saved;
+        setTimeout(closeForm, 2000);
+    } catch(e) {
+        alert("Fehler beim Speichern.");
+    }
+}
+
+// ADMIN LOGIK
+async function adminLogin(){
+    const pw = prompt(TXT[currentLang].adminPw);
+    if(pw !== "maria90") return;
+    invite.style.display="none";
+    admin.style.display="block";
+    loadAdmin();
+}
+
+function logout(){
+    admin.style.display="none";
+    invite.style.display="block";
+}
+
+async function loadAdmin(){
+    const res=await fetch(DB+".json");
+    const data=await res.json();
+    let total=0, values=[];
+    adminList.innerHTML="";
+    
+    for(const id in data){
+        const d=data[id];
+        total += (Number(d.count) || 0);
+        values.push(Number(d.count) || 0);
+        
+        adminList.innerHTML+=`<tr>
+            <td contenteditable="true">${d.mainName}</td>
+            <td contenteditable="true">${d.phone}</td>
+            <td contenteditable="true">${d.time}</td>
+            <td contenteditable="true">${d.count}</td>
+            <td contenteditable="true">${d.persons ? d.persons.join(", ") : ""}</td>
+            <td contenteditable="true">${d.music}</td>
+            <td contenteditable="true">${d.message}</td>
+            <td>
+                <button onclick="saveRow('${id}', this)">💾</button>
+                <button onclick="del('${id}')" style="background:red">🗑</button>
+            </td>
+        </tr>`;
+    }
+    sum.innerText=TXT[currentLang].total+" "+total;
+    drawChart(values);
+}
+
+async function saveRow(id, btn){
+    const row = btn.parentElement.parentElement;
+    const tds = row.children;
+    const data = {
+        mainName: tds[0].innerText,
+        phone: tds[1].innerText,
+        time: tds[2].innerText,
+        count: Number(tds[3].innerText),
+        persons: tds[4].innerText.split(",").map(p=>p.trim()),
+        music: tds[5].innerText,
+        message: tds[6].innerText
+    };
+    await fetch(`${DB}/${id}.json`,{method:"PATCH", body:JSON.stringify(data)});
+    alert("Gespeichert!");
+    loadAdmin();
+}
+
+async function del(id){
+    if(!confirm(TXT[currentLang].delConfirm)) return;
+    await fetch(`${DB}/${id}.json`,{method:"DELETE"});
+    loadAdmin();
+}
+
+function drawChart(values){
+    const ctx=chart.getContext("2d");
+    ctx.clearRect(0,0,chart.width,chart.height);
+    if(values.length === 0) return;
+    const max=Math.max(...values, 1);
+    values.forEach((v,i)=>{
+        const h=(v/max)*180;
+        ctx.fillStyle="#c9b26b";
+        ctx.fillRect(i*40+20, 230-h, 30, h);
+        ctx.fillStyle="#000";
+        ctx.fillText(v, i*40+30, 225-h);
+    });
+}
 </script>
 </body>
 </html>

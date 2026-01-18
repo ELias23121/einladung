@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#c9b26b;--bg-dark:#0b0b0b;--panel:#111}
+:root{--gold:#c9b26b;--panel:#111}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Playfair Display',serif;background:#000;color:#eee;overflow-x:hidden}
 
@@ -23,39 +23,45 @@ body{font-family:'Playfair Display',serif;background:#000;color:#eee;overflow-x:
 /* Overlay sehr transparent */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.05);z-index:-2;pointer-events:none}
 
-/* Einladungstext direkt sichtbar */
+/* Einladungstext direkt */
 #invite{position:relative;z-index:2;text-align:center;padding:60px 20px;}
-#invite h1{color:var(--gold);font-size:42px;margin-bottom:20px;text-shadow:1px 1px 6px #000;}
-#invite p{font-size:20px;line-height:1.7;text-shadow:1px 1px 4px #000;margin-bottom:30px;}
+#invite h1{color:var(--gold);font-size:36px;margin-bottom:20px;text-shadow:1px 1px 6px #000;}
+#invite p{font-size:18px;line-height:1.7;text-shadow:1px 1px 4px #000;margin-bottom:30px;}
 
 /* Buttons */
-button{background:none;border:1px solid var(--gold);color:var(--gold);padding:14px 32px;font-size:16px;cursor:pointer;transition:.3s}
+button{background:none;border:1px solid var(--gold);color:var(--gold);padding:12px 28px;font-size:16px;cursor:pointer;transition:.3s}
 button:hover{background:var(--gold);color:#000;box-shadow:0 0 15px rgba(201,178,107,.6)}
 
-/* Modal Formular */
-label{display:block;margin-top:14px;font-size:14px;opacity:.85}
+/* Formular */
+label{display:block;margin-top:12px;font-size:14px;opacity:.85}
 input,textarea,select{width:100%;padding:10px;margin-top:6px;background:#1a1a1a;border:1px solid #444;color:#fff;font-family:inherit}
+
+/* Modal */
 .modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.85);z-index:5}
-.modal-box{background:var(--panel);border:1px solid var(--gold);padding:30px;width:92%;max-width:600px;max-height:90vh;overflow:auto}
+.modal-box{background:var(--panel);border:1px solid var(--gold);padding:25px;width:92%;max-width:500px;max-height:90vh;overflow:auto}
 
 /* Admin */
-.admin{display:none;position:relative;z-index:2;max-width:1300px;margin:40px auto;padding:30px;background:var(--panel);border:1px solid var(--gold)}
+.admin{display:none;position:relative;z-index:2;max-width:1000px;margin:30px auto;padding:20px;background:var(--panel);border:1px solid var(--gold)}
 table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border:1px solid #444;padding:8px;vertical-align:top}
+th,td{border:1px solid #444;padding:6px;vertical-align:top}
 th{background:#1a1a1a}
-canvas{display:block;margin:30px auto;background:#0e0e0e;border:1px solid #333}
+canvas{display:block;margin:20px auto;background:#0e0e0e;border:1px solid #333;max-width:100%}
 
 /* Footer */
-footer{position:relative;z-index:2;text-align:center;opacity:.5;margin:40px;cursor:pointer}
-
-/* Scrollbar Modal */
-.modal-box::-webkit-scrollbar{width:8px}
-.modal-box::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+footer{position:relative;z-index:2;text-align:center;opacity:.5;margin:20px;cursor:pointer}
 
 /* Slideshow leichter Zoom */
 .slide{transform: scale(1);transition: transform 60s linear}
 .slide:nth-child(1){animation:zoomfade1 60s infinite}
 @keyframes zoomfade1{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+
+/* Responsive */
+@media(max-width:768px){
+#invite h1{font-size:28px;}
+#invite p{font-size:16px;}
+button{padding:10px 22px;font-size:14px;}
+.modal-box{width:95%;padding:20px;}
+}
 </style>
 </head>
 <body>
@@ -69,9 +75,9 @@ footer{position:relative;z-index:2;text-align:center;opacity:.5;margin:40px;curs
 </div>
 <div class="overlay"></div>
 
-<audio id="music" src="0118.mp3" autoplay loop muted></audio>
+<audio id="music" src="0118.mp3" autoplay loop></audio>
 
-<!-- Einladungstext direkt -->
+<!-- Einladung -->
 <div id="invite">
 <h1 id="title"></h1>
 <p id="inviteText"></p>

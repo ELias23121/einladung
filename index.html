@@ -8,103 +8,223 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-:root{--gold:#c9b26b}
-body{
- margin:0;font-family:'Playfair Display',serif;
- background:#000;color:#eee;
+/* ================== GRUNDLAGEN ================== */
+:root{
+  --gold:#c9b26b;
+  --bg-dark:#0b0b0b;
+  --panel:#111;
 }
-#bg{position:fixed;inset:0;z-index:-2}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Playfair Display',serif;
+  background:#000;
+  color:#eee;
+}
+
+/* ================== HINTERGRUND ================== */
+#bg{
+  position:fixed;
+  inset:0;
+  z-index:-3;
+}
 .slide{
- position:absolute;inset:0;
- background-size:cover;
- background-position:center;
- opacity:0;animation:fade 60s infinite;
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:0;
+  animation:fade 60s infinite;
 }
 .slide:nth-child(1){background-image:url("bilder/bild1.jpg")}
 .slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:12s}
 .slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:24s}
 .slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:36s}
 .slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:48s}
+
 @keyframes fade{
- 0%{opacity:0}8%{opacity:1}22%{opacity:1}30%{opacity:0}
+  0%{opacity:0}
+  8%{opacity:1}
+  22%{opacity:1}
+  30%{opacity:0}
 }
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55)}
 
+/* Overlay darf NICHT klicken blockieren */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:-2;
+  pointer-events:none;
+}
+
+/* ================== KARTEN ================== */
 .card{
- max-width:900px;margin:60px auto;padding:50px;
- background:rgba(15,15,15,.85);
- border:1px solid var(--gold);
- box-shadow:0 0 50px rgba(201,178,107,.25);
+  position:relative;
+  z-index:2;
+  max-width:900px;
+  margin:60px auto;
+  padding:50px;
+  background:rgba(15,15,15,.88);
+  border:1px solid var(--gold);
+  box-shadow:0 0 60px rgba(201,178,107,.25);
 }
 
-h1,h2{color:var(--gold);text-align:center}
-p{text-align:center;line-height:1.8;font-size:18px}
+h1,h2,h3{
+  color:var(--gold);
+  text-align:center;
+  margin-top:0;
+}
 
+p{
+  text-align:center;
+  line-height:1.8;
+  font-size:18px;
+}
+
+/* ================== BUTTONS ================== */
 button{
- background:none;border:1px solid var(--gold);
- color:var(--gold);padding:12px 30px;
- font-size:16px;cursor:pointer;
+  background:none;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:14px 32px;
+  font-size:16px;
+  cursor:pointer;
+  display:inline-block;
+  transition:.3s;
 }
-button:hover{background:var(--gold);color:#000}
-
-label{display:block;margin-top:12px;font-size:14px;opacity:.8}
-input,textarea{
- width:100%;padding:10px;margin-top:4px;
- background:#1a1a1a;border:1px solid #444;color:#fff;
+button:hover{
+  background:var(--gold);
+  color:#000;
+  box-shadow:0 0 15px rgba(201,178,107,.6);
 }
 
+/* ================== FORM ================== */
+label{
+  display:block;
+  margin-top:14px;
+  font-size:14px;
+  opacity:.85;
+}
+
+input,textarea,select{
+  width:100%;
+  padding:10px;
+  margin-top:6px;
+  background:#1a1a1a;
+  border:1px solid #444;
+  color:#fff;
+  font-family:inherit;
+}
+
+/* ================== MODAL ================== */
 .modal{
- position:fixed;inset:0;display:none;
- justify-content:center;align-items:center;
- background:rgba(0,0,0,.85);
+  position:fixed;
+  inset:0;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  background:rgba(0,0,0,.85);
+  z-index:5;
 }
+
 .modal-box{
- background:#111;border:1px solid var(--gold);
- padding:30px;width:90%;max-width:600px;
+  background:var(--panel);
+  border:1px solid var(--gold);
+  padding:30px;
+  width:92%;
+  max-width:600px;
+  max-height:90vh;
+  overflow:auto;
 }
 
+/* ================== ADMIN ================== */
 .admin{
- display:none;max-width:1200px;
- margin:40px auto;padding:30px;
- background:#111;border:1px solid var(--gold);
+  display:none;
+  position:relative;
+  z-index:2;
+  max-width:1300px;
+  margin:40px auto;
+  padding:30px;
+  background:var(--panel);
+  border:1px solid var(--gold);
 }
 
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{border:1px solid #444;padding:6px;vertical-align:top}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
 
-footer{text-align:center;opacity:.5;margin:30px;cursor:pointer}
-canvas{background:#0e0e0e;margin-top:20px}
+th,td{
+  border:1px solid #444;
+  padding:8px;
+  vertical-align:top;
+}
+
+th{background:#1a1a1a}
+
+canvas{
+  display:block;
+  margin:30px auto;
+  background:#0e0e0e;
+  border:1px solid #333;
+}
+
+/* ================== FOOTER ================== */
+footer{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  opacity:.5;
+  margin:40px;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
+<!-- Hintergrund -->
 <div id="bg">
- <div class="slide"></div><div class="slide"></div>
- <div class="slide"></div><div class="slide"></div>
- <div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
 </div>
 <div class="overlay"></div>
 
+<!-- Musik -->
 <audio id="music" src="0118.mp3" autoplay loop muted></audio>
 
+<!-- EINLADUNG -->
 <div class="card" id="invite">
 <h1>Liebe Familie und Freunde!</h1>
+
 <p>
 Ein Stern am Himmel und Schatz auf Erden wird 90<br><br>
-Wir laden herzlich ein, den 90. Geburtstag von Maria Ronczka zu feiern.<br><br>
-<b>Wann:</b> Samstag, 11. April 2026 ab 13 Uhr<br>
-<b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
+Wir laden herzlich ein, den 90. Geburtstag von <b>Maria Ronczka</b> mit uns zu feiern.<br><br>
+<b>Wann:</b> Samstag, den 11. April 2026, ab 13 Uhr<br>
+<b>Wo:</b> Gasthaus Greskamp,<br>
+Funnenkampstraße 18, 59399 Olfen<br><br>
+Wir freuen uns auf einen schönen Tag mit Euch.<br>
+Leider können wir keine Übernachtung anbieten.<br><br>
 Rückmeldung bitte bis Ende Februar<br><br>
 <b>Maria Ronczka mit Familie</b>
 </p>
 
+<div style="text-align:center">
 <button onclick="openForm()">Rückmeldung geben</button>
+</div>
 </div>
 
 <!-- FORMULAR -->
 <div class="modal" id="formModal">
 <div class="modal-box">
+
 <h2>Rückmeldung</h2>
 
 <label>Ihr Name</label>
@@ -133,6 +253,7 @@ Rückmeldung bitte bis Ende Februar<br><br>
 <br>
 <button onclick="sendForm()">Absenden</button>
 <button onclick="closeForm()">Schließen</button>
+
 <p id="formStatus"></p>
 </div>
 </div>
@@ -142,117 +263,134 @@ Rückmeldung bitte bis Ende Februar<br><br>
 <h2>📊 Admin – Gästeliste</h2>
 <h3 id="sum"></h3>
 
-<canvas id="chart" width="1000" height="300"></canvas>
+<canvas id="chart" width="1100" height="300"></canvas>
 
 <table>
 <thead>
 <tr>
-<th>Name</th><th>Tel</th><th>Zeit</th>
-<th>Anz.</th><th>Personen</th>
-<th>Essen</th><th>Musik</th><th>Nachricht</th>
+<th>Name</th>
+<th>Telefon</th>
+<th>Zeit</th>
+<th>Anzahl</th>
+<th>Personen</th>
+<th>Essen</th>
+<th>Musik</th>
+<th>Nachricht</th>
 <th>Aktion</th>
 </tr>
 </thead>
 <tbody id="adminList"></tbody>
 </table>
 
+<br>
 <button onclick="logout()">Admin schließen</button>
 </div>
 
 <footer onclick="adminLogin()">Admin</footer>
 
 <script>
+/* ================== KONFIG ================== */
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
 
+/* ================== FORM ================== */
 function openForm(){
- formModal.style.display="flex";
- music.muted=false;music.play();
- buildPersons();
+  formModal.style.display="flex";
+  music.muted=false;
+  music.play();
+  buildPersons();
 }
-function closeForm(){formModal.style.display="none"}
+
+function closeForm(){
+  formModal.style.display="none";
+}
 
 function buildPersons(){
- persons.innerHTML="";
- for(let i=1;i<=count.value;i++){
-  persons.innerHTML+=`
-   <label>Person ${i}</label>
-   <input class="person">
-  `;
- }
+  persons.innerHTML="";
+  const n=parseInt(count.value)||1;
+  for(let i=1;i<=n;i++){
+    persons.innerHTML+=`
+      <label>Name der Person ${i}</label>
+      <input class="person">
+    `;
+  }
 }
 
 async function sendForm(){
- const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);
- const data={
-  mainName:mainName.value,
-  phone:phone.value,
-  time:time.value,
-  count:personsArr.length,
-  persons:personsArr,
-  food:food.value,
-  music:musicWish.value,
-  message:message.value,
-  ts:new Date().toLocaleString()
- };
- await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
- formStatus.innerText="✔ Gespeichert";
- closeForm();
+  const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);
+  const data={
+    mainName:mainName.value,
+    phone:phone.value,
+    time:time.value,
+    count:personsArr.length,
+    persons:personsArr,
+    food:food.value,
+    music:musicWish.value,
+    message:message.value,
+    ts:new Date().toLocaleString()
+  };
+  await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
+  formStatus.innerText="✔ Rückmeldung gespeichert";
+  closeForm();
 }
 
+/* ================== ADMIN ================== */
 async function adminLogin(){
- if(prompt("Admin Passwort")!=="maria90")return;
- invite.style.display="none";
- admin.style.display="block";
- loadAdmin();
+  if(prompt("Admin Passwort")!=="maria90")return;
+  invite.style.display="none";
+  admin.style.display="block";
+  loadAdmin();
 }
 
 function logout(){
- admin.style.display="none";
- invite.style.display="block";
+  admin.style.display="none";
+  invite.style.display="block";
 }
 
 async function loadAdmin(){
- const res=await fetch(DB+".json");
- const data=await res.json();
- let total=0,values=[];
- adminList.innerHTML="";
- for(let id in data){
-  const d=data[id];
-  total+=d.count;
-  values.push(d.count);
-  adminList.innerHTML+=`
-  <tr>
-   <td>${d.mainName}</td>
-   <td>${d.phone}</td>
-   <td>${d.time}</td>
-   <td>${d.count}</td>
-   <td>${d.persons.join(", ")}</td>
-   <td>${d.food}</td>
-   <td>${d.music}</td>
-   <td>${d.message}</td>
-   <td><button onclick="del('${id}')">🗑</button></td>
-  </tr>`;
- }
- sum.innerText="Gesamtpersonen: "+total;
- drawChart(values);
+  const res=await fetch(DB+".json");
+  const data=await res.json();
+  let total=0;
+  let values=[];
+  adminList.innerHTML="";
+  for(const id in data){
+    const d=data[id];
+    total+=d.count;
+    values.push(d.count);
+    adminList.innerHTML+=`
+    <tr>
+      <td>${d.mainName}</td>
+      <td>${d.phone}</td>
+      <td>${d.time}</td>
+      <td>${d.count}</td>
+      <td>${d.persons.join(", ")}</td>
+      <td>${d.food}</td>
+      <td>${d.music}</td>
+      <td>${d.message}</td>
+      <td><button onclick="del('${id}')">🗑</button></td>
+    </tr>`;
+  }
+  sum.innerText="Gesamtpersonen: "+total;
+  drawChart(values);
 }
 
 async function del(id){
- if(!confirm("Eintrag löschen?"))return;
- await fetch(DB+"/"+id+".json",{method:"DELETE"});
- loadAdmin();
+  if(!confirm("Eintrag löschen?"))return;
+  await fetch(DB+"/"+id+".json",{method:"DELETE"});
+  loadAdmin();
 }
 
+/* ================== DIAGRAMM ================== */
 function drawChart(values){
- const c=chart.getContext("2d");
- c.clearRect(0,0,1000,300);
- const max=Math.max(...values,1);
- values.forEach((v,i)=>{
-  const h=(v/max)*250;
-  c.fillStyle="#c9b26b";
-  c.fillRect(i*50+20,280-h,30,h);
- });
+  const ctx=chart.getContext("2d");
+  ctx.clearRect(0,0,chart.width,chart.height);
+  const max=Math.max(...values,1);
+  values.forEach((v,i)=>{
+    const h=(v/max)*250;
+    ctx.fillStyle="#c9b26b";
+    ctx.fillRect(i*50+20,280-h,30,h);
+  });
 }
 </script>
+
 </body>
 </html>

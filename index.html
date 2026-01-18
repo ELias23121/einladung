@@ -11,152 +11,165 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Open+Sans:wght@400;700&display=swap');
 
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Open Sans', sans-serif; overflow: hidden; background-color: #111; color: white; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Open Sans', sans-serif; overflow: hidden; background-color: #000; color: white; }
 
         /* SLIDESHOW */
         .slideshow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        .slideshow img { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0; animation: fade 25s infinite; }
+        .slideshow img { 
+            position: absolute; width: 100%; height: 100%; 
+            object-fit: cover; opacity: 0; 
+            animation: fadeAnimation 25s infinite; 
+        }
+        
+        /* Animation Timing */
         .slideshow img:nth-child(1) { animation-delay: 0s; }
         .slideshow img:nth-child(2) { animation-delay: 5s; }
         .slideshow img:nth-child(3) { animation-delay: 10s; }
         .slideshow img:nth-child(4) { animation-delay: 15s; }
         .slideshow img:nth-child(5) { animation-delay: 20s; }
-        @keyframes fade { 0%, 20% { opacity: 1; } 25%, 100% { opacity: 0; } }
 
-        /* OVERLAY */
-        .hero { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: rgba(0, 0, 0, 0.5); padding: 20px; box-sizing: border-box; }
-        h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2.5rem, 7vw, 4.5rem); margin: 10px; color: #ffd700; }
-        
-        .btn { background: #A0522D; color: white; border: 2px solid white; padding: 15px 35px; border-radius: 50px; font-size: 1.2rem; cursor: pointer; margin-top: 20px; }
+        @keyframes fadeAnimation {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            20% { opacity: 1; }
+            30% { opacity: 0; }
+            100% { opacity: 0; }
+        }
 
-        /* MODAL */
+        /* OVERLAY TEXT */
+        .hero { 
+            height: 100%; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center; 
+            background: rgba(0, 0, 0, 0.45); padding: 20px; box-sizing: border-box; 
+        }
+        h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2.2rem, 8vw, 4rem); margin: 10px; color: #ffd700; text-shadow: 2px 2px 8px #000; }
+        p { font-size: 1.2rem; margin: 5px; text-shadow: 1px 1px 4px #000; }
+
+        .btn { 
+            background: #A0522D; color: white; border: 2px solid #ffd700; 
+            padding: 15px 35px; border-radius: 50px; font-size: 1.2rem; 
+            cursor: pointer; margin-top: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        /* FORMULAR MODAL */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); overflow-y: auto; }
-        .modal-content { background: white; margin: 30px auto; padding: 25px; width: 90%; max-width: 450px; border-radius: 15px; color: #333; }
-        input, textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .modal-content { background: white; margin: 20px auto; padding: 25px; width: 90%; max-width: 450px; border-radius: 15px; color: #333; position: relative; }
+        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
         
-        /* STATUS BALKEN */
-        #statusBox { display: none; margin-top: 15px; }
-        .progress-bg { background: #eee; height: 12px; border-radius: 6px; overflow: hidden; }
-        #progressBar { height: 100%; width: 0%; background: #4CAF50; transition: width 0.3s; }
+        /* STATUS */
+        #statusBox { display: none; margin-top: 15px; text-align: center; }
+        .bar-bg { background: #eee; height: 10px; border-radius: 5px; overflow: hidden; }
+        #bar { height: 100%; width: 0%; background: #4CAF50; transition: width 0.3s; }
     </style>
 </head>
-<body onclick="startAll()">
+<body onclick="startMusic()">
 
-    <audio id="bgMusic" loop src="0118.mp3"></audio>
+    <audio id="bgMusic" loop src="bilder/0118.mp3"></audio>
 
     <div class="slideshow">
-        <img src="bild1.jpg" onerror="console.error('Bild 1 nicht gefunden')">
-        <img src="bild2.jpg" onerror="console.error('Bild 2 nicht gefunden')">
-        <img src="bild3.jpg" onerror="console.error('Bild 3 nicht gefunden')">
-        <img src="bild4.jpg" onerror="console.error('Bild 4 nicht gefunden')">
-        <img src="bild5.jpg" onerror="console.error('Bild 5 nicht gefunden')">
+        <img src="bilder/bild1.jpg" onerror="this.src='Bilder/bild1.jpg'">
+        <img src="bilder/bild2.jpg" onerror="this.src='Bilder/bild2.jpg'">
+        <img src="bilder/bild3.jpg" onerror="this.src='Bilder/bild3.jpg'">
+        <img src="bilder/bild4.jpg" onerror="this.src='Bilder/bild4.jpg'">
+        <img src="bilder/bild5.jpg" onerror="this.src='Bilder/bild5.jpg'">
     </div>
 
     <div class="hero">
+        <p>Herzliche Einladung</p>
         <h1>90 Jahre Maria Ronczka</h1>
-        <p>Samstag, 11. April 2026 | Gasthaus Greskamp</p>
-        <button class="btn" onclick="openM()">Jetzt zusagen</button>
+        <p>11. April 2026 | Gasthaus Greskamp</p>
+        <button class="btn" onclick="openM()">Zusage geben</button>
     </div>
 
     <div id="myModal" class="modal">
         <div class="modal-content">
-            <h2 style="text-align:center; color:#A0522D">Anmeldung</h2>
-            <form id="inviteForm">
-                <input type="text" id="inpName" placeholder="Dein Name" required>
-                <input type="tel" id="inpTel" placeholder="Telefon" required>
-                <input type="number" id="inpAnzahl" placeholder="Anzahl Personen" value="1" min="1" oninput="genFields()">
+            <h2 style="text-align:center; color:#A0522D; font-family:'Dancing Script'; font-size: 2rem;">Rückmeldung</h2>
+            <form id="rsvpForm">
+                <input type="text" id="name" placeholder="Dein Name" required>
+                <input type="tel" id="tel" placeholder="Telefonnummer" required>
+                <label>Anzahl Gäste insgesamt:</label>
+                <input type="number" id="anzahl" value="1" min="1" oninput="addFields()">
                 
-                <div id="guestFields"></div>
+                <div id="extraGuests"></div>
                 
-                <input type="text" id="inpMusik" placeholder="Musikwunsch">
-                <textarea id="inpNotiz" placeholder="Sonstiges"></textarea>
+                <input type="text" id="musik" placeholder="Musikwunsch">
+                <textarea id="notiz" placeholder="Nachricht/Allergien"></textarea>
                 
-                <button type="button" class="btn" style="width:100%" onclick="sendData()">Absenden</button>
+                <button type="button" class="btn" style="width:100%" onclick="save()">Absenden</button>
 
                 <div id="statusBox">
-                    <div class="progress-bg"><div id="progressBar"></div></div>
-                    <p id="statusMsg" style="text-align:center; font-size:12px; color:#666; margin-top:5px;"></p>
+                    <div class="bar-bg"><div id="bar"></div></div>
+                    <p id="msg" style="font-size:12px; margin-top:5px; color: #666;">Daten werden gesendet...</p>
                 </div>
             </form>
-            <button onclick="closeM()" style="margin-top:10px; background:none; border:none; color:red; cursor:pointer; width:100%;">Schließen</button>
+            <p onclick="closeM()" style="text-align:center; color:red; cursor:pointer; margin-top:15px;">Schließen</p>
         </div>
     </div>
 
     <script>
-        // 1. FIREBASE SETUP
-        var firebaseConfig = { databaseURL: "https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app" };
-        firebase.initializeApp(firebaseConfig);
-        var database = firebase.database();
+        // 1. FIREBASE
+        var config = { databaseURL: "https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app" };
+        firebase.initializeApp(config);
+        var db = firebase.database();
 
-        // 2. MUSIK STARTEN
-        function startAll() {
-            var m = document.getElementById("bgMusic");
-            if(m.paused) m.play().catch(function(e){});
+        // 2. FUNKTIONEN
+        function startMusic() {
+            var a = document.getElementById("bgMusic");
+            if(a.paused) a.play().catch(function(e){});
         }
 
-        // 3. MODAL STEUERUNG
         function openM() { document.getElementById("myModal").style.display = "block"; }
         function closeM() { document.getElementById("myModal").style.display = "none"; }
 
-        // 4. GÄSTE FELDER
-        function genFields() {
-            var c = document.getElementById("guestFields");
-            var n = document.getElementById("inpAnzahl").value;
-            c.innerHTML = "";
-            for(var i=2; i<=n; i++) {
-                var input = document.createElement("input");
-                input.placeholder = "Name Gast " + i;
-                input.className = "extraGuest";
-                c.appendChild(input);
+        function addFields() {
+            var div = document.getElementById("extraGuests");
+            var val = document.getElementById("anzahl").value;
+            div.innerHTML = "";
+            for(var i=2; i<=val; i++) {
+                var inp = document.createElement("input");
+                inp.placeholder = "Name Gast " + i;
+                inp.className = "guestName";
+                div.appendChild(inp);
             }
         }
 
-        // 5. DATEN SENDEN MIT LIVE STATUS
-        function sendData() {
-            var btn = document.querySelector("#inviteForm button");
-            var sBox = document.getElementById("statusBox");
-            var bar = document.getElementById("progressBar");
-            var msg = document.getElementById("statusMsg");
+        function save() {
+            var b = document.querySelector("#rsvpForm button");
+            var s = document.getElementById("statusBox");
+            var p = document.getElementById("bar");
+            
+            b.disabled = true;
+            s.style.display = "block";
+            p.style.width = "30%";
 
-            btn.disabled = true;
-            sBox.style.display = "block";
-            bar.style.width = "20%";
-            msg.innerText = "Sammle Daten...";
-
-            // Namen sammeln
-            var extraElements = document.getElementsByClassName("extraGuest");
-            var allNames = [document.getElementById("inpName").value];
-            for(var j=0; j<extraElements.length; j++) {
-                allNames.push(extraElements[j].value);
+            var extras = document.getElementsByClassName("guestName");
+            var liste = [document.getElementById("name").value];
+            for(var j=0; j<extras.length; j++) {
+                liste.push(extras[j].value);
             }
 
-            var data = {
-                name: document.getElementById("inpName").value,
-                telefon: document.getElementById("inpTel").value,
-                anzahl: document.getElementById("inpAnzahl").value,
-                gaeste: allNames,
-                musik: document.getElementById("inpMusik").value,
-                notiz: document.getElementById("inpNotiz").value,
+            var d = {
+                absender: document.getElementById("name").value,
+                telefon: document.getElementById("tel").value,
+                personen: document.getElementById("anzahl").value,
+                alleNamen: liste, // HIER SIND DIE GÄSTE DRIN
+                musik: document.getElementById("musik").value,
+                info: document.getElementById("notiz").value,
                 zeit: new Date().toLocaleString()
             };
 
-            bar.style.width = "60%";
-            msg.innerText = "Übertrage an Datenbank...";
+            p.style.width = "70%";
 
-            database.ref("anmeldungen").push(data)
-                .then(function() {
-                    bar.style.width = "100%";
-                    msg.innerText = "Erfolgreich gespeichert!";
-                    setTimeout(function() {
-                        alert("Danke für deine Zusage!");
-                        location.reload(); // Seite neu laden um alles zu resetten
-                    }, 1000);
-                })
-                .catch(function(error) {
-                    alert("Fehler: " + error.message);
-                    btn.disabled = false;
-                    sBox.style.display = "none";
-                });
+            db.ref("anmeldungen").push(d).then(function() {
+                p.style.width = "100%";
+                setTimeout(function() {
+                    alert("Vielen Dank! Die Anmeldung wurde gespeichert.");
+                    location.reload();
+                }, 800);
+            }).catch(function(e) {
+                alert("Fehler: " + e.message);
+                b.disabled = false;
+            });
         }
     </script>
 </body>

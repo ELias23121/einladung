@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90. Geburtstag Maria Ronczka</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Open+Sans:wght@400;700&display=swap');
+
+        /* Layout & Hintergrund */
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Open Sans', sans-serif; overflow: hidden; background: #000; color: white; }
+        
+        .slideshow { position: fixed; width: 100%; height: 100%; z-index: -1; }
+        .slideshow img {
+            position: absolute; width: 100%; height: 100%; object-fit: cover;
+            opacity: 0; animation: fade 25s infinite;
+        }
+        .slideshow img:nth-child(1) { animation-delay: 0s; }
+        .slideshow img:nth-child(2) { animation-delay: 5s; }
+        .slideshow img:nth-child(3) { animation-delay: 10s; }
+        .slideshow img:nth-child(4) { animation-delay: 15s; }
+        .slideshow img:nth-child(5) { animation-delay: 20s; }
+        @keyframes fade { 0% { opacity: 0; } 10% { opacity: 1; } 20% { opacity: 1; } 30% { opacity: 0; } 100% { opacity: 0; } }
+
+        /* Hero Text */
+        .hero {
+            position: relative; height: 100%; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            background: rgba(0, 0, 0, 0.5); padding: 20px; box-sizing: border-box;
+        }
+        h1 { font-family: 'Dancing Script', cursive; font-size: clamp(2rem, 8vw, 4rem); margin: 10px; color: #f1c40f; }
+        p { font-size: 1.2rem; margin: 5px; }
+
+        .btn {
+            background: #A0522D; color: white; border: none; padding: 15px 40px;
+            border-radius: 50px; font-size: 1.2rem; cursor: pointer; transition: 0.3s; margin-top: 20px;
+        }
+        .btn:hover { background: #8B4513; transform: scale(1.05); }
+
+        /* Modal / Formular */
+        .modal {
+            display: none; position: fixed; z-index: 100; left: 0; top: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.85); overflow-y: auto;
+        }
+        .modal-content {
+            background: white; margin: 20px auto; padding: 30px;
+            width: 90%; max-width: 450px; border-radius: 15px; color: #333; position: relative;
+        }
+        .close { position: absolute; right: 20px; top: 10px; font-size: 30px; cursor: pointer; }
+
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        label { font-weight: bold; display: block; margin-top: 10px; color: #555; }
+
+        /* Fortschrittsanzeige */
+        #statusBox { display: none; margin-top: 20px; text-align: center; }
+        .progress-bar-bg { background: #eee; border-radius: 10px; height: 12px; width: 100%; overflow: hidden; }
+        #progressBar { background: #4CAF50; height: 100%; width: 0%; transition: width 0.4s; }
+        #statusText { font-size: 0.9rem; margin-top: 8px; color: #444; }
+
+        #music-icon { position: fixed; bottom: 20px; left: 20px; z-index: 1000; font-size: 2rem; cursor: pointer; opacity: 0.7; }
+    </style>
+</head>
+<body onclick="playMusic()">
+
+    <audio id="bgMusic" loop>
+        <source src="0118.mp3" type="audio/mp3">
+    </audio>
+    <div id="music-icon">🎶</div>
+
+    <div class="slideshow">
+        <img src="bild1.jpg"> <img src="bild2.jpg"> <img src="bild3.jpg"> <img src="bild4.jpg"> <img src="bild5.jpg">
+    </div>
+
+    <div class="hero">
+        <p>Liebe Familie und Freunde!</p>
+        <h1>"Ein Stern am Himmel und Schatz auf Erden wird 90"</h1>
+        <p>WIR laden herzlich ein, den 90-sten Geburtstag von</p>
+        <p><strong>Maria Ronczka</strong> mit uns zu feiern!</p>
+        <p>Samstag, 11. April 2026, ab 13 Uhr</p>
+        <p>Gasthaus Greskamp, Olfen</p>
+        <button class="btn" onclick="openModal()">Jetzt Rückmeldung geben</button>
+    </div>
+
+    <div id="rsvpModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 style="font-family:'Dancing Script'; color:#A0522D;">Zusage</h2>
+            <form id="rsvpForm">
+                <input type="text" id="mainName" placeholder="Dein Vor- & Nachname" required>
+                <input type="tel" id="telefon" placeholder="Telefonnummer" required>
+                
+                <label>Voraussichtliche Ankunft (ab 13:00):</label>
+                <input type="time" id="uhrzeit" min="13:00" value="13:00" required>
+                
+                <label>Anzahl Personen insgesamt:</label>
+                <input type="number" id="personenAnzahl" min="1" value="1" required>
+                
+                <div id="additionalNamesContainer"></div>
+
+                <input type="text" id="musikwunsch" placeholder="Musikwunsch (optional)">
+                <textarea id="notizen" placeholder="Allergien oder Anmerkungen" rows="2"></textarea>
+
+                <button type="submit" class="btn" id="submitBtn" style="width:100%">Anmeldung absenden</button>
+
+                <div id="statusBox">
+                    <div class="progress-bar-bg"><div id="progressBar"></div></div>
+                    <p id="statusText">Sende Daten...</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        // Konfiguration deiner Database
+        const firebaseConfig = {
+            databaseURL: "https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Musik-Steuerung
+        window.playMusic = function() {
+            const music = document.getElementById("bgMusic");
+            if(music.paused) music.play().catch(() => {});
+        }
+
+        // Modal Steuerung
+        window.openModal = () => document.getElementById("rsvpModal").style.display = "block";
+        window.closeModal = () => document.getElementById("rsvpModal").style.display = "none";
+
+        // Dynamische Textfelder für weitere Namen
+        const numInput = document.getElementById('personenAnzahl');
+        const namesContainer = document.getElementById('additionalNamesContainer');
+
+        numInput.addEventListener('input', () => {
+            namesContainer.innerHTML = "";
+            const count = parseInt(numInput.value);
+            if (count > 1) {
+                const label = document.createElement("label");
+                label.innerText = "Namen der weiteren Personen:";
+                namesContainer.appendChild(label);
+                for (let i = 2; i <= count; i++) {
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    input.placeholder = `Name Gast ${i}`;
+                    input.className = "extra-guest-name";
+                    input.required = true;
+                    namesContainer.appendChild(input);
+                }
+            }
+        });
+
+        // Formular Absenden
+        document.getElementById("rsvpForm").onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById("submitBtn");
+            const statusBox = document.getElementById("statusBox");
+            const bar = document.getElementById("progressBar");
+            const text = document.getElementById("statusText");
+
+            btn.disabled = true;
+            statusBox.style.display = "block";
+            
+            try {
+                // Status: Start
+                bar.style.width = "20%";
+                text.innerText = "Sammle Namen...";
+
+                const extraNames = Array.from(document.querySelectorAll('.extra-guest-name')).map(el => el.value);
+                
+                // Alle Namen in ein Array (Hauptname + Extra Namen)
+                const alleGäste = [document.getElementById("mainName").value, ...extraNames];
+
+                const formData = {
+                    hauptAnmelder: document.getElementById("mainName").value,
+                    telefon: document.getElementById("telefon").value,
+                    ankunft: document.getElementById("uhrzeit").value,
+                    personenAnzahl: numInput.value,
+                    alleNamenListe: alleGäste, // HIER SIND ALLE NAMEN DRIN
+                    musikwunsch: document.getElementById("musikwunsch").value,
+                    notizen: document.getElementById("notizen").value,
+                    zeitpunkt: new Date().toLocaleString()
+                };
+
+                // Status: Senden
+                bar.style.width = "60%";
+                text.innerText = "Übertrage an Datenbank...";
+
+                const entriesRef = ref(db, 'anmeldungen');
+                await push(entriesRef, formData);
+
+                // Status: Erfolg
+                bar.style.width = "100%";
+                text.innerText = "Erfolgreich gesendet!";
+                
+                setTimeout(() => {
+                    alert("Vielen Dank! Deine Anmeldung wurde gespeichert.");
+                    closeModal();
+                    document.getElementById("rsvpForm").reset();
+                    statusBox.style.display = "none";
+                    bar.style.width = "0%";
+                    btn.disabled = false;
+                }, 1000);
+
+            } catch (error) {
+                console.error(error);
+                text.innerText = "Fehler: " + error.message;
+                bar.style.background = "red";
+                btn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>

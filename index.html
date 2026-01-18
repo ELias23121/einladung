@@ -1,107 +1,201 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>90. Geburtstag Maria</title>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<meta charset="UTF-8">
+<title>90. Geburtstag – Einladung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Open+Sans:wght@400;700&display=swap');
+<style>
+:root {
+    --gold: #d4af37;
+}
 
-        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Open Sans', sans-serif; background: #000; color: white; overflow: hidden; }
+body {
+    margin: 0;
+    font-family: "Georgia", serif;
+    color: white;
+    background: black;
+}
 
-        /* SLIDESHOW MIT KORREKTEN PFADEN */
-        .slideshow { position: fixed; width: 100%; height: 100%; z-index: -1; }
-        .slideshow img { 
-            position: absolute; width: 100%; height: 100%; object-fit: cover; 
-            opacity: 0; animation: fade 25s infinite; 
-        }
-        
-        /* Animation Verzögerung */
-        .slideshow img:nth-child(1) { animation-delay: 0s; }
-        .slideshow img:nth-child(2) { animation-delay: 5s; }
-        .slideshow img:nth-child(3) { animation-delay: 10s; }
-        .slideshow img:nth-child(4) { animation-delay: 15s; }
-        .slideshow img:nth-child(5) { animation-delay: 20s; }
+#slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+.slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    animation: fade 50s infinite;
+}
+.slide:nth-child(1){animation-delay:0s;background-image:url("bilder/bild1.jpg")}
+.slide:nth-child(2){animation-delay:10s;background-image:url("bilder/bild2.jpg")}
+.slide:nth-child(3){animation-delay:20s;background-image:url("bilder/bild3.jpg")}
+.slide:nth-child(4){animation-delay:30s;background-image:url("bilder/bild4.jpg")}
+.slide:nth-child(5){animation-delay:40s;background-image:url("bilder/bild5.jpg")}
 
-        @keyframes fade { 0% {opacity: 0} 10% {opacity: 1} 20% {opacity: 1} 30% {opacity: 0} 100% {opacity: 0} }
+@keyframes fade {
+    0%,100%{opacity:0}
+    10%,25%{opacity:1}
+}
 
-        /* TEXT OVERLAY */
-        .hero { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.4); text-align: center; padding: 20px; }
-        h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #ffd700; margin: 0; text-shadow: 2px 2px 10px #000; }
-        p { font-size: 1.2rem; margin: 10px 0; }
+.overlay {
+    background: rgba(0,0,0,.65);
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 30px;
+    border-radius: 12px;
+    border: 2px solid var(--gold);
+}
 
-        .btn { background: #A0522D; color: #fff; padding: 15px 35px; border-radius: 50px; border: 2px solid #ffd700; cursor: pointer; font-size: 1.2rem; transition: 0.3s; }
-        .btn:hover { transform: scale(1.05); background: #8B4513; }
+h2,h3 { color: var(--gold); }
 
-        /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; overflow-y: auto; }
-        .modal-box { background: white; color: #333; margin: 5% auto; padding: 30px; width: 90%; max-width: 400px; border-radius: 15px; position: relative; }
-        input, textarea { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-    </style>
+button {
+    background: var(--gold);
+    border: none;
+    padding: 12px 22px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+/* POPUP */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.8);
+    justify-content: center;
+    align-items: center;
+}
+.modal-content {
+    background: #111;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    border: 2px solid var(--gold);
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+}
+
+.progress {
+    height: 8px;
+    background: #444;
+    border-radius: 4px;
+}
+.progress div {
+    height: 100%;
+    width: 0%;
+    background: var(--gold);
+}
+</style>
 </head>
-<body onclick="document.getElementById('musi').play()">
 
-    <audio id="musi" loop src="Bilder/0118.mp3"></audio>
+<body>
 
-    <div class="slideshow">
-        <img src="Bilder/bild1.jpeg">
-        <img src="Bilder/bild2.jpeg">
-        <img src="Bilder/bild3.jpeg">
-        <img src="Bilder/bild4.jpeg">
-        <img src="Bilder/bild5.jpeg">
-    </div>
+<div id="slideshow">
+<div class="slide"></div><div class="slide"></div>
+<div class="slide"></div><div class="slide"></div>
+<div class="slide"></div>
+</div>
 
-    <div class="hero">
-        <p>Einladung zum 90. Geburtstag</p>
-        <h1>Maria Ronczka</h1>
-        <p>11. April 2026 | Gasthaus Greskamp</p>
-        <button class="btn" onclick="document.getElementById('myModal').style.display='block'">Jetzt zusagen</button>
-    </div>
+<audio id="musik" src="0118.mp3" loop autoplay muted></audio>
 
-    <div id="myModal" class="modal">
-        <div class="modal-box">
-            <h2 style="font-family:'Dancing Script'; color:#A0522D; text-align:center; font-size:2rem;">Zusage</h2>
-            <form id="form">
-                <input type="text" id="name" placeholder="Dein Name" required>
-                <input type="tel" id="tel" placeholder="Telefonnummer" required>
-                <input type="number" id="anzahl" placeholder="Anzahl Personen" min="1" value="1">
-                <textarea id="notiz" placeholder="Musikwunsch oder Anmerkungen"></textarea>
-                <button type="button" class="btn" style="width:100%; color: white;" onclick="senden()">Absenden</button>
-            </form>
-            <p onclick="document.getElementById('myModal').style.display='none'" style="color:red; cursor:pointer; text-align:center; margin-top:20px;">Abbrechen</p>
-        </div>
-    </div>
+<div class="overlay">
+<h2 id="title"></h2>
+<p id="text"></p>
 
-    <script>
-        // Firebase Verbindung
-        var config = { databaseURL: "https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app" };
-        firebase.initializeApp(config);
+<button onclick="openModal()">📨 Rückmeldung</button>
+<select onchange="setLang(this.value)">
+<option value="de">Deutsch</option>
+<option value="pl">Polski</option>
+</select>
+</div>
 
-        function senden() {
-            var n = document.getElementById("name").value;
-            var t = document.getElementById("tel").value;
-            var a = document.getElementById("anzahl").value;
-            var o = document.getElementById("notiz").value;
-            
-            if(!n || !t) { alert("Bitte Namen und Telefon angeben"); return; }
+<!-- POPUP -->
+<div class="modal" id="modal">
+<div class="modal-content">
+<h3>Rückmeldung</h3>
 
-            firebase.database().ref("anmeldungen").push({
-                Name: n,
-                Telefon: t,
-                Gäste: a,
-                Nachricht: o,
-                Datum: new Date().toLocaleString()
-            }).then(function() {
-                alert("Erfolgreich gesendet! Wir freuen uns.");
-                location.reload();
-            }).catch(function(e) {
-                alert("Fehler: " + e.message);
-            });
-        }
-    </script>
+<input id="name" placeholder="Name">
+<input id="telefon" placeholder="Telefon">
+
+<label>Ankunft (ab 13 Uhr)</label>
+<input type="time" id="zeit" min="13:00">
+
+<input type="number" id="anzahl" min="1" placeholder="Anzahl Personen">
+
+<textarea id="musikWunsch" placeholder="Musikwunsch (optional)"></textarea>
+<textarea id="nachricht" placeholder="Nachricht"></textarea>
+
+<button onclick="senden()">Absenden</button>
+<button onclick="closeModal()">Schließen</button>
+
+<div class="progress"><div id="bar"></div></div>
+<p id="status"></p>
+</div>
+</div>
+
+<script>
+const db="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen.json";
+const audio=document.getElementById("musik");
+
+function openModal(){
+    document.getElementById("modal").style.display="flex";
+    audio.muted=false; audio.play();
+}
+function closeModal(){
+    document.getElementById("modal").style.display="none";
+}
+
+async function senden(){
+    document.getElementById("bar").style.width="50%";
+    await fetch(db,{
+        method:"POST",
+        body:JSON.stringify({
+            name:name.value,
+            telefon:telefon.value,
+            zeit:zeit.value,
+            anzahl:+anzahl.value,
+            musik:musikWunsch.value,
+            nachricht:nachricht.value,
+            ts:Date.now()
+        })
+    });
+    document.getElementById("bar").style.width="100%";
+    document.getElementById("status").innerText="✅ Gespeichert";
+}
+
+/* SPRACHEN */
+const lang={
+de:{
+title:"Liebe Familie und Freunde!",
+text:`Ein Stern am Himmel und Schatz auf Erden wird 90 ⭐<br><br>
+Wir laden herzlich ein, den 90. Geburtstag von Maria Ronczka zu feiern!<br><br>
+<b>Wann:</b> 11. April 2026 ab 13 Uhr<br>
+<b>Wo:</b> Gasthaus Greskamp, Olfen`
+},
+pl:{
+title:"Droga Rodzino i Przyjaciele!",
+text:`Gwiazda na niebie i skarb na ziemi kończy 90 lat ⭐<br><br>
+Zapraszamy serdecznie na 90. urodziny Marii Ronczki!`
+}
+}
+function setLang(l){
+    title.innerHTML=lang[l].title;
+    text.innerHTML=lang[l].text;
+}
+setLang("de");
+</script>
+
 </body>
 </html>

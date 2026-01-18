@@ -20,11 +20,11 @@ body{font-family:'Playfair Display',serif;background:#000;color:#eee;overflow-x:
 .slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:48s}
 @keyframes fade{0%{opacity:0}8%{opacity:1}22%{opacity:1}30%{opacity:0}}
 
-/* Overlay */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:-2;pointer-events:none}
+/* Overlay transparenter */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.15);z-index:-2;pointer-events:none}
 
 /* Einladungskarte */
-.card{position:relative;z-index:2;max-width:900px;margin:60px auto;padding:50px;background:rgba(15,15,15,.88);border:1px solid var(--gold);box-shadow:0 0 60px rgba(201,178,107,.25)}
+.card{position:relative;z-index:2;max-width:900px;margin:60px auto;padding:50px;background:rgba(15,15,15,0.88);border:1px solid var(--gold);box-shadow:0 0 60px rgba(201,178,107,.25)}
 h1,h2,h3{color:var(--gold);text-align:center;margin-top:0}
 p{text-align:center;line-height:1.8;font-size:18px}
 
@@ -38,7 +38,7 @@ input,textarea,select{width:100%;padding:10px;margin-top:6px;background:#1a1a1a;
 
 /* Modal */
 .modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.85);z-index:5}
-.modal-box{background:var(--panel);border:1px solid var(--gold);padding:30px;width:92%;max-width:600px;max-height:90vh;overflow:auto;}
+.modal-box{background:var(--panel);border:1px solid var(--gold);padding:30px;width:92%;max-width:600px;max-height:90vh;overflow:auto}
 
 /* Admin */
 .admin{display:none;position:relative;z-index:2;max-width:1300px;margin:40px auto;padding:30px;background:var(--panel);border:1px solid var(--gold)}
@@ -53,6 +53,11 @@ footer{position:relative;z-index:2;text-align:center;opacity:.5;margin:40px;curs
 /* Scrollbar für Modal */
 .modal-box::-webkit-scrollbar{width:8px}
 .modal-box::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+
+/* Slideshow leichtes Zoom */
+.slide{transform: scale(1);transition: transform 60s linear}
+.slide:nth-child(1){animation:zoomfade1 60s infinite}
+@keyframes zoomfade1{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 </style>
 </head>
 <body>
@@ -152,7 +157,6 @@ footer{position:relative;z-index:2;text-align:center;opacity:.5;margin:40px;curs
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
 let currentLang="de";
 
-/* ====== MEHRSPRACHIGKEIT ====== */
 const TXT={
 de:{
 title:"Liebe Familie und Freunde!",
@@ -210,7 +214,6 @@ delConfirm:"Usunąć wpis?"
 }
 };
 
-/* ====== SPRACHE SETZEN ====== */
 function setLang(l){
 currentLang=l;
 title.innerHTML=TXT[l].title;
@@ -230,7 +233,7 @@ buildPersons();
 }
 setLang("de");
 
-/* ====== FORM ====== */
+/* FORMULAR */
 function openForm(){formModal.style.display="flex";music.muted=false;music.play();buildPersons();}
 function closeForm(){formModal.style.display="none";}
 function buildPersons(){
@@ -260,7 +263,7 @@ async function sendForm(){
  closeForm();
 }
 
-/* ====== ADMIN ====== */
+/* ADMIN */
 async function adminLogin(){
  if(prompt(TXT[currentLang].adminPw)!=="maria90")return;
  invite.style.display="none"; admin.style.display="block"; loadAdmin();
@@ -309,7 +312,7 @@ async function saveRow(id){
 }
 async function del(id){if(!confirm(TXT[currentLang].delConfirm))return;await fetch(DB+"/"+id+".json",{method:"DELETE"});loadAdmin();}
 
-/* ====== DIAGRAMM ====== */
+/* DIAGRAMM */
 function drawChart(values){
  const ctx=chart.getContext("2d");
  ctx.clearRect(0,0,chart.width,chart.height);

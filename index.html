@@ -8,49 +8,61 @@
 <style>
 :root{--lila:#b06ab3;--panel:#111;}
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{font-family:'Playfair Display',serif;background:#000;color:var(--lila);overflow:hidden;font-weight:700;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;}
+html,body{height:100%;width:100%;overflow-x:hidden;font-family:'Playfair Display',serif;font-weight:700;background:#000;color:var(--lila);}
+body{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.6;}
+
+/* Intro-Text wie #invite */
+#intro{
+position:fixed;top:100px;left:50%;transform:translateX(-50%);
+max-width:800px;padding:40px 20px;background:none;color:var(--lila);
+font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;z-index:10;transition:opacity 1s;
+}
+
 /* Hintergrundslideshow */
-#bg{position:fixed;inset:0;z-index:-3;height:100%;width:100%;}
+#bg{position:fixed;inset:0;z-index:-3;height:100%;width:100%;display:none;}
 .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 60s infinite;height:100%;width:100%;}
-.slide:first-child{opacity:1;}
-.slide:nth-child(1){background-image:url("bilder/bild1.jpg");}
+.slide:nth-child(1){background-image:url("bilder/bild1.jpg");animation-delay:0s;}
 .slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:12s;}
 .slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:24s;}
 .slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:36s;}
 .slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:48s;}
 @keyframes fade{0%{opacity:0}8%{opacity:1}22%{opacity:1}30%{opacity:0}}
-/* Overlay */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,0.05);z-index:-2;pointer-events:none;}
-/* Einladung */
-#invite{position:relative;z-index:2;padding:40px 20px;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100%;text-align:center;}
+
+/* Einladungstext */
+#invite{position:relative;z-index:2;padding:40px 20px;display:none;flex-direction:column;justify-content:center;align-items:center;margin-top:100px;max-width:800px;}
 #invite h1{color:var(--lila);font-size:48px;margin-bottom:20px;text-shadow:1px 1px 6px #000;font-weight:700;}
-#invite p{font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;margin-bottom:30px;font-weight:700;max-width:800px;}
+#invite p{font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;margin-bottom:30px;font-weight:700;}
 #invite button{margin-top:20px;}
 #invite select{margin-top:20px;padding:8px 12px;font-weight:700;}
+
 /* Buttons */
 button{background:none;border:2px solid var(--lila);color:var(--lila);padding:14px 30px;font-size:18px;cursor:pointer;transition:.3s;font-weight:700;}
 button:hover{background:var(--lila);color:#000;box-shadow:0 0 20px rgba(176,106,179,.6);}
+
 /* Formular */
 label{display:block;margin-top:14px;font-size:16px;font-weight:700;}
 input,textarea,select{width:100%;padding:12px;margin-top:6px;background:#1a1a1a;border:1px solid #444;color:var(--lila);font-family:inherit;font-weight:700;}
-/* Modal */
 .modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.85);z-index:5;}
 .modal-box{background:var(--panel);border:2px solid var(--lila);padding:30px;width:92%;max-width:520px;max-height:90vh;overflow:auto;}
+
 /* Admin */
 .admin{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:6;max-width:95%;padding:25px;background:var(--panel);border:2px solid var(--lila);}
 .admin table{display:block;overflow-x:auto;width:100%;border-collapse:collapse;font-size:16px;}
 th,td{border:1px solid #444;padding:8px;vertical-align:top;color:var(--lila);font-weight:700;}
 th{background:#1a1a1a;}
 canvas{display:block;margin:20px auto;background:#0e0e0e;border:1px solid #333;max-width:100%;}
+
 /* Footer */
 footer{position:fixed;bottom:10px;width:100%;z-index:7;text-align:center;font-weight:700;opacity:.7;}
 footer span{cursor:pointer;color:var(--lila);margin:0 5px;}
 footer span:hover{text-decoration:underline;}
-/* Slideshow Zoom */
+
+/* Slideshow leichter Zoom */
 .slide{transform: scale(1);transition: transform 60s linear;}
 .slide:nth-child(1){animation:zoomfade1 60s infinite;}
 @keyframes zoomfade1{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
+
 /* Responsive */
 @media(max-width:768px){
 #invite h1{font-size:36px;}
@@ -62,12 +74,27 @@ button{padding:12px 24px;font-size:16px;}
 </style>
 </head>
 <body>
+
+<!-- Intro Text -->
+<div id="intro">
+Ein Stern am Himmel und Schatz auf Erden wird 90.<br>
+Liebe Familie und Freunde!<br>
+Wir laden herzlich ein, den 90. Geburtstag von <b>Maria Ronczka</b> mit uns zu feiern!<br>
+<b>Wann:</b> Samstag, den 11. April 2026, ab 13 Uhr<br>
+<b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br>
+Wir freuen uns auf einen schönen Tag mit Euch.<br>
+Leider können wir keine Übernachtung anbieten.<br>
+Rückmeldung bitte bis Ende Februar.<br>
+<b>Herzliche Grüße, Maria Ronczka mit Familie</b>
+</div>
+
+<!-- Hintergrundslideshow -->
 <div id="bg">
-<div class="slide"></div>
-<div class="slide"></div>
-<div class="slide"></div>
-<div class="slide"></div>
-<div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
+  <div class="slide"></div>
 </div>
 <div class="overlay"></div>
 <audio id="music" src="0118.mp3" autoplay loop muted></audio>
@@ -83,7 +110,7 @@ button{padding:12px 24px;font-size:16px;}
 </select>
 </div>
 
-<!-- Popup-Formular -->
+<!-- Popup Formular -->
 <div class="modal" id="formModal">
 <div class="modal-box">
 <h2 id="formTitle"></h2>
@@ -114,16 +141,7 @@ button{padding:12px 24px;font-size:16px;}
 <canvas id="chart" width="1100" height="300"></canvas>
 <table>
 <thead>
-<tr>
-<th>Name</th>
-<th>Telefon</th>
-<th>Zeit</th>
-<th>Anz.</th>
-<th>Personen</th>
-<th>Musik</th>
-<th>Nachricht</th>
-<th>Aktion</th>
-</tr>
+<tr><th>Name</th><th>Telefon</th><th>Zeit</th><th>Anz.</th><th>Personen</th><th>Musik</th><th>Nachricht</th><th>Aktion</th></tr>
 </thead>
 <tbody id="adminList"></tbody>
 </table>
@@ -131,12 +149,14 @@ button{padding:12px 24px;font-size:16px;}
 <button onclick="logout()">Admin schließen</button>
 </div>
 
+<!-- Footer -->
 <footer>
 <span onclick="adminLogin()">Admin Login</span> | 
 <span onclick="window.open('https://instagram.com/placeholder','_blank')">Erstellt von Elias R.</span>
 </footer>
 
 <script>
+// Texte
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
 let currentLang="de";
 const TXT={
@@ -148,11 +168,8 @@ Wir freuen uns auf einen schönen Tag mit Euch.<br>
 Leider können wir keine Übernachtung anbieten.<br>
 Rückmeldung bitte bis Ende Februar.<br><br>
 <b>Herzliche Grüße, Maria Ronczka mit Familie</b>`,
-reply:"Rückmeldung geben",formTitle:"Rückmeldung",
-replyBtnSend:"Absenden",replyBtnClose:"Schließen",saved:"✔ Gespeichert",
-person:"Person",lblName:"Ihr Name",lblPhone:"Telefonnummer",
-lblTime:"Ankunft (ab 13 Uhr)",lblCount:"Anzahl Personen (max 5)",
-lblMusic:"Musikwunsch (optional)",lblMessage:"Nachricht",adminPw:"Admin Passwort",total:"Gesamtpersonen:",delConfirm:"Eintrag löschen?"},
+reply:"Rückmeldung geben",formTitle:"Rückmeldung",replyBtnSend:"Absenden",replyBtnClose:"Schließen",saved:"✔ Gespeichert",
+person:"Person",lblName:"Ihr Name",lblPhone:"Telefonnummer",lblTime:"Ankunft (ab 13 Uhr)",lblCount:"Anzahl Personen (max 5)",lblMusic:"Musikwunsch (optional)",lblMessage:"Nachricht",adminPw:"Admin Passwort",total:"Gesamtpersonen:",delConfirm:"Eintrag löschen?"},
 pl:{title:"Droga Rodzino i Przyjaciele!",inviteText:`Gwiazda na niebie i skarb na ziemi kończy 90 lat.<br><br>
 Serdecznie zapraszamy na 90. urodziny <b>Maria Ronczka</b>!<br><br>
 <b>Kiedy:</b> Sobota, 11 kwietnia 2026, od 13:00<br>
@@ -161,13 +178,11 @@ Cieszymy się na wspólny piękny dzień.<br>
 Niestety nie możemy zaoferować noclegu.<br>
 Prosimy o odpowiedź do końca lutego.<br><br>
 <b>Pozdrawiamy, Maria Ronczka z rodziną</b>`,
-reply:"Odpowiedź",formTitle:"Odpowiedź",
-replyBtnSend:"Wyślij",replyBtnClose:"Zamknij",saved:"✔ Zapisano",
-person:"Osoba",lblName:"Twoje imię",lblPhone:"Telefon",
-lblTime:"Godzina przybycia (od 13:00)",lblCount:"Liczba osób (max 5)",
-lblMusic:"Życzenie muzyczne (opcjonalnie)",lblMessage:"Wiadomość",adminPw:"Hasło admina",total:"Liczba osób:",delConfirm:"Usunąć wpis?"}
+reply:"Odpowiedź",formTitle:"Odpowiedź",replyBtnSend:"Wyślij",replyBtnClose:"Zamknij",saved:"✔ Zapisano",
+person:"Osoba",lblName:"Twoje imię",lblPhone:"Telefon",lblTime:"Godzina przybycia (od 13:00)",lblCount:"Liczba osób (max 5)",lblMusic:"Życzenie muzyczne (opcjonalnie)",lblMessage:"Wiadomość",adminPw:"Hasło admina",total:"Liczba osób:",delConfirm:"Usunąć wpis?"}
 };
 
+// Sprache setzen
 function setLang(l){
 currentLang=l;
 title.innerHTML=TXT[l].title;
@@ -180,72 +195,51 @@ lblTime.innerHTML=TXT[l].lblTime;
 lblCount.innerHTML=TXT[l].lblCount;
 lblMusic.innerHTML=TXT[l].lblMusic;
 lblMessage.innerHTML=TXT[l].lblMessage;
-btnSend.innerText = TXT[l].replyBtnSend;
-btnClose.innerText = TXT[l].replyBtnClose;
+btnSend.innerText=TXT[l].replyBtnSend;
+btnClose.innerText=TXT[l].replyBtnClose;
 buildPersons();
 }
 setLang("de");
 
-// Musik Autoplay
+// Intro + Slideshow
 window.addEventListener('load',()=>{
-  const music=document.getElementById('music');
-  music.play().catch(()=>{});
-  document.body.addEventListener('click',()=>{music.muted=false;music.play();},{once:true});
+const intro=document.getElementById('intro');
+const bg=document.getElementById('bg');
+const invite=document.getElementById('invite');
+const music=document.getElementById('music');
+music.play().catch(()=>{});
+setTimeout(()=>{
+intro.style.opacity=0;
+setTimeout(()=>{
+intro.style.display='none';
+bg.style.display='block';
+invite.style.display='flex';
+},1000);
+},5000);
 });
 
+// Form
 function openForm(){formModal.style.display="flex";buildPersons();}
 function closeForm(){formModal.style.display="none";}
 function buildPersons(){persons.innerHTML="";const n=Math.min(parseInt(count.value)||1,5);for(let i=1;i<=n;i++){persons.innerHTML+=`<label>${TXT[currentLang].person} ${i}</label><input class="person">`}}
-
 async function sendForm(){
+formStatus.innerText="Übertrage Daten...";
 const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);
 const phoneVal=phone.value.replace(/\D/g,'');
-if(!phoneVal){alert("Telefonnummer nur Zahlen!");return;}
+if(!phoneVal){alert("Telefonnummer nur Zahlen!");formStatus.innerText="";return;}
 const data={mainName:mainName.value,phone:phoneVal,time:time.value,count:personsArr.length,persons:personsArr,music:musicWish.value,message:message.value,ts:new Date().toLocaleString()};
 await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
 formStatus.innerText=TXT[currentLang].saved;
 closeForm();
 }
 
+// Admin
 async function adminLogin(){if(prompt(TXT[currentLang].adminPw)!=="maria90")return;invite.style.display="none";admin.style.display="block";loadAdmin();}
 function logout(){admin.style.display="none";invite.style.display="flex";}
-
-async function loadAdmin(){
-const res=await fetch(DB+".json");
-const data=await res.json();
-let total=0,values=[];
-adminList.innerHTML="";
-for(const id in data){
-const d=data[id];
-total+=d.count;
-values.push(d.count);
-adminList.innerHTML+=`<tr><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`;
-}
-sum.innerText=TXT[currentLang].total+" "+total;
-drawChart(values);
-}
-
-async function saveRow(id){
-const row=document.querySelector(`#adminList tr:nth-child(${Array.from(adminList.children).findIndex(r=>r==document.getElementById("adminList").children[id])+1})`);
-const tds=row.children;
-const persons=tds[4].innerText.split(",").map(p=>p.trim());
-const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};
-await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});
-loadAdmin();
-}
-
+async function loadAdmin(){const res=await fetch(DB+".json");const data=await res.json();let total=0,values=[];adminList.innerHTML="";for(const id in data){const d=data[id];total+=d.count;values.push(d.count);adminList.innerHTML+=`<tr><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`}sum.innerText=TXT[currentLang].total+" "+total;drawChart(values);}
+async function saveRow(id){const row=document.querySelector(`#adminList tr:nth-child(${Array.from(adminList.children).findIndex(r=>r==document.getElementById("adminList").children[id])+1})`);const tds=row.children;const persons=tds[4].innerText.split(",").map(p=>p.trim());const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});loadAdmin();}
 async function del(id){if(!confirm(TXT[currentLang].delConfirm))return;await fetch(DB+"/"+id+".json",{method:"DELETE"});loadAdmin();}
-
-function drawChart(values){
-const ctx=chart.getContext("2d");
-ctx.clearRect(0,0,chart.width,chart.height);
-const max=Math.max(...values,1);
-values.forEach((v,i)=>{
-const h=(v/max)*250;
-ctx.fillStyle="#b06ab3";
-ctx.fillRect(i*50+20,280-h,30,h);
-});
-}
+function drawChart(values){const ctx=chart.getContext("2d");ctx.clearRect(0,0,chart.width,chart.height);const max=Math.max(...values,1);values.forEach((v,i)=>{const h=(v/max)*250;ctx.fillStyle="#b06ab3";ctx.fillRect(i*50+20,280-h,30,h);});}
 </script>
 </body>
 </html>

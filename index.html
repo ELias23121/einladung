@@ -75,7 +75,6 @@ button{padding:12px 24px;font-size:16px;}
 </head>
 <body>
 
-<!-- Intro Text -->
 <div id="intro">
 Ein Stern am Himmel und Schatz auf Erden wird 90.<br>
 Liebe Familie und Freunde!<br>
@@ -88,7 +87,6 @@ Rückmeldung bitte bis Ende Februar.<br>
 <b>Herzliche Grüße, Maria Ronczka mit Familie</b>
 </div>
 
-<!-- Hintergrundslideshow -->
 <div id="bg">
   <div class="slide"></div>
   <div class="slide"></div>
@@ -99,7 +97,6 @@ Rückmeldung bitte bis Ende Februar.<br>
 <div class="overlay"></div>
 <audio id="music" src="0118.mp3" autoplay loop muted></audio>
 
-<!-- Einladung -->
 <div id="invite">
 <h1 id="title"></h1>
 <p id="inviteText"></p>
@@ -110,22 +107,21 @@ Rückmeldung bitte bis Ende Februar.<br>
 </select>
 </div>
 
-<!-- Popup Formular -->
 <div class="modal" id="formModal">
 <div class="modal-box">
 <h2 id="formTitle"></h2>
-<label id="lblName"></label>
+<label id="lblName" for="mainName"></label>
 <input id="mainName">
-<label id="lblPhone"></label>
-<input id="phone" pattern="[0-9]*" inputmode="numeric">
-<label id="lblTime"></label>
+<label id="lblPhone" for="phone"></label>
+<input id="phone" type="tel">
+<label id="lblTime" for="time"></label>
 <input type="time" id="time" min="13:00">
-<label id="lblCount"></label>
+<label id="lblCount" for="count"></label>
 <input type="number" id="count" min="1" max="5" value="1" onchange="buildPersons()">
 <div id="persons"></div>
-<label id="lblMusic"></label>
+<label id="lblMusic" for="musicWish"></label>
 <textarea id="musicWish"></textarea>
-<label id="lblMessage"></label>
+<label id="lblMessage" for="message"></label>
 <textarea id="message"></textarea>
 <br>
 <button id="btnSend" onclick="sendForm()"></button>
@@ -134,7 +130,6 @@ Rückmeldung bitte bis Ende Februar.<br>
 </div>
 </div>
 
-<!-- Admin -->
 <div class="admin" id="admin">
 <h2>📊 Admin – Gästeliste</h2>
 <h3 id="sum"></h3>
@@ -149,7 +144,6 @@ Rückmeldung bitte bis Ende Februar.<br>
 <button onclick="logout()">Admin schließen</button>
 </div>
 
-<!-- Footer -->
 <footer>
 <span onclick="adminLogin()">Admin Login</span> | 
 <span onclick="window.open('https://instagram.com/placeholder','_blank')">Erstellt von Elias R.</span>
@@ -174,7 +168,7 @@ pl:{title:"Droga Rodzino i Przyjaciele!",inviteText:`Gwiazda na niebie i skarb n
 Serdecznie zapraszamy na 90. urodziny <b>Maria Ronczka</b>!<br><br>
 <b>Kiedy:</b> Sobota, 11 kwietnia 2026, od 13:00<br>
 <b>Gdzie:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
-Cieszymy się na wspólny piękny dzień.<br>
+Cieszymy się na wspólny pfekny dzień.<br>
 Niestety nie możemy zaoferować noclegu.<br>
 Prosimy o odpowiedź do końca lutego.<br><br>
 <b>Pozdrawiamy, Maria Ronczka z rodziną</b>`,
@@ -185,18 +179,18 @@ person:"Osoba",lblName:"Twoje imię",lblPhone:"Telefon",lblTime:"Godzina przybyc
 // Sprache setzen
 function setLang(l){
 currentLang=l;
-title.innerHTML=TXT[l].title;
-inviteText.innerHTML=TXT[l].inviteText;
-btnReply.innerHTML=TXT[l].reply;
-formTitle.innerHTML=TXT[l].formTitle;
-lblName.innerHTML=TXT[l].lblName;
-lblPhone.innerHTML=TXT[l].lblPhone;
-lblTime.innerHTML=TXT[l].lblTime;
-lblCount.innerHTML=TXT[l].lblCount;
-lblMusic.innerHTML=TXT[l].lblMusic;
-lblMessage.innerHTML=TXT[l].lblMessage;
-btnSend.innerText=TXT[l].replyBtnSend;
-btnClose.innerText=TXT[l].replyBtnClose;
+document.getElementById('title').innerHTML=TXT[l].title;
+document.getElementById('inviteText').innerHTML=TXT[l].inviteText;
+document.getElementById('btnReply').innerHTML=TXT[l].reply;
+document.getElementById('formTitle').innerHTML=TXT[l].formTitle;
+document.getElementById('lblName').innerHTML=TXT[l].lblName;
+document.getElementById('lblPhone').innerHTML=TXT[l].lblPhone;
+document.getElementById('lblTime').innerHTML=TXT[l].lblTime;
+document.getElementById('lblCount').innerHTML=TXT[l].lblCount;
+document.getElementById('lblMusic').innerHTML=TXT[l].lblMusic;
+document.getElementById('lblMessage').innerHTML=TXT[l].lblMessage;
+document.getElementById('btnSend').innerText=TXT[l].replyBtnSend;
+document.getElementById('btnClose').innerText=TXT[l].replyBtnClose;
 buildPersons();
 }
 setLang("de");
@@ -219,27 +213,97 @@ invite.style.display='flex';
 });
 
 // Form
-function openForm(){formModal.style.display="flex";buildPersons();}
-function closeForm(){formModal.style.display="none";}
-function buildPersons(){persons.innerHTML="";const n=Math.min(parseInt(count.value)||1,5);for(let i=1;i<=n;i++){persons.innerHTML+=`<label>${TXT[currentLang].person} ${i}</label><input class="person">`}}
+function openForm(){document.getElementById('formModal').style.display="flex";buildPersons();}
+function closeForm(){document.getElementById('formModal').style.display="none";}
+function buildPersons(){
+const container = document.getElementById('persons');
+container.innerHTML="";
+const n=Math.min(parseInt(document.getElementById('count').value)||1,5);
+for(let i=1;i<=n;i++){
+container.innerHTML+=`<label>${TXT[currentLang].person} ${i}</label><input class="person">`;
+}
+}
+
 async function sendForm(){
-formStatus.innerText="Übertrage Daten...";
+const status = document.getElementById('formStatus');
+status.innerText="Übertrage Daten...";
 const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);
-const phoneVal=phone.value.replace(/\D/g,'');
-if(!phoneVal){alert("Telefonnummer nur Zahlen!");formStatus.innerText="";return;}
-const data={mainName:mainName.value,phone:phoneVal,time:time.value,count:personsArr.length,persons:personsArr,music:musicWish.value,message:message.value,ts:new Date().toLocaleString()};
+const phoneVal=document.getElementById('phone').value.replace(/\D/g,'');
+if(!phoneVal){alert("Telefonnummer nur Zahlen!");status.innerText="";return;}
+const data={
+mainName:document.getElementById('mainName').value,
+phone:phoneVal,
+time:document.getElementById('time').value,
+count:personsArr.length,
+persons:personsArr,
+music:document.getElementById('musicWish').value,
+message:document.getElementById('message').value,
+ts:new Date().toLocaleString()
+};
+try {
 await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
-formStatus.innerText=TXT[currentLang].saved;
-closeForm();
+status.innerText=TXT[currentLang].saved;
+setTimeout(closeForm, 1500);
+} catch(e) {
+status.innerText="Fehler beim Speichern.";
+}
 }
 
 // Admin
-async function adminLogin(){if(prompt(TXT[currentLang].adminPw)!=="maria90")return;invite.style.display="none";admin.style.display="block";loadAdmin();}
-function logout(){admin.style.display="none";invite.style.display="flex";}
-async function loadAdmin(){const res=await fetch(DB+".json");const data=await res.json();let total=0,values=[];adminList.innerHTML="";for(const id in data){const d=data[id];total+=d.count;values.push(d.count);adminList.innerHTML+=`<tr><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`}sum.innerText=TXT[currentLang].total+" "+total;drawChart(values);}
-async function saveRow(id){const row=document.querySelector(`#adminList tr:nth-child(${Array.from(adminList.children).findIndex(r=>r==document.getElementById("adminList").children[id])+1})`);const tds=row.children;const persons=tds[4].innerText.split(",").map(p=>p.trim());const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});loadAdmin();}
-async function del(id){if(!confirm(TXT[currentLang].delConfirm))return;await fetch(DB+"/"+id+".json",{method:"DELETE"});loadAdmin();}
-function drawChart(values){const ctx=chart.getContext("2d");ctx.clearRect(0,0,chart.width,chart.height);const max=Math.max(...values,1);values.forEach((v,i)=>{const h=(v/max)*250;ctx.fillStyle="#b06ab3";ctx.fillRect(i*50+20,280-h,30,h);});}
+async function adminLogin(){
+if(prompt(TXT[currentLang].adminPw)!=="maria90")return;
+document.getElementById('invite').style.display="none";
+document.getElementById('admin').style.display="block";
+loadAdmin();
+}
+function logout(){
+document.getElementById('admin').style.display="none";
+document.getElementById('invite').style.display="flex";
+}
+
+async function loadAdmin(){
+const res=await fetch(DB+".json");
+const data=await res.json();
+let total=0,values=[];
+const list = document.getElementById('adminList');
+list.innerHTML="";
+for(const id in data){
+const d=data[id];
+total+=d.count;
+values.push(d.count);
+list.innerHTML+=`<tr data-id="${id}"><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`;
+}
+document.getElementById('sum').innerText=TXT[currentLang].total+" "+total;
+drawChart(values);
+}
+
+async function saveRow(id){
+const row=document.querySelector(`tr[data-id="${id}"]`);
+const tds=row.children;
+const persons=tds[4].innerText.split(",").map(p=>p.trim());
+const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};
+await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});
+loadAdmin();
+}
+
+async function del(id){
+if(!confirm(TXT[currentLang].delConfirm))return;
+await fetch(DB+"/"+id+".json",{method:"DELETE"});
+loadAdmin();
+}
+
+function drawChart(values){
+const canvas = document.getElementById('chart');
+const ctx=canvas.getContext("2d");
+ctx.clearRect(0,0,canvas.width,canvas.height);
+if(values.length === 0) return;
+const max=Math.max(...values,1);
+values.forEach((v,i)=>{
+const h=(v/max)*250;
+ctx.fillStyle="#b06ab3";
+ctx.fillRect(i*50+20,280-h,30,h);
+});
+}
 </script>
 </body>
 </html>

@@ -11,7 +11,7 @@
 html,body{height:100%;width:100%;overflow-x:hidden;font-family:'Playfair Display',serif;font-weight:700;background:#000;color:var(--lila);}
 body{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.6;}
 
-/* Intro-Text */
+/* Intro-Text wie #invite */
 #intro{
 position:fixed;top:100px;left:50%;transform:translateX(-50%);
 max-width:800px;padding:40px 20px;background:none;color:var(--lila);
@@ -20,22 +20,26 @@ font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;z-index:10;transitio
 
 /* Hintergrundslideshow */
 #bg{position:fixed;inset:0;z-index:-3;height:100%;width:100%;display:none;}
-.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 30s infinite;height:100%;width:100%;}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 60s infinite;height:100%;width:100%;}
 
-/* EXAKTE PFADE ZU DEINEN BILDERN */
-.slide:nth-child(1){background-image:url("bilder/bild1.jpg");animation-delay:0s;}
-.slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:6s;}
-.slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:12s;}
-.slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:18s;}
-.slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:24s;}
+/* PFAD-KORREKTUR FÜR GITHUB */
+.slide:nth-child(1){background-image:url("./bilder/bild1.jpg");animation-delay:0s;}
+.slide:nth-child(2){background-image:url("./bilder/bild2.jpg");animation-delay:12s;}
+.slide:nth-child(3){background-image:url("./bilder/bild3.jpg");animation-delay:24s;}
+.slide:nth-child(4){background-image:url("./bilder/bild4.jpg");animation-delay:36s;}
+.slide:nth-child(5){background-image:url("./bilder/bild5.jpg");animation-delay:48s;}
 
 @keyframes fade{0%{opacity:0}8%{opacity:1}22%{opacity:1}30%{opacity:0}}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.1);z-index:-2;pointer-events:none;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.05);z-index:-2;pointer-events:none;}
 
 /* Einladungstext */
 #invite{position:relative;z-index:2;padding:40px 20px;display:none;flex-direction:column;justify-content:center;align-items:center;margin-top:100px;max-width:800px;}
 #invite h1{color:var(--lila);font-size:48px;margin-bottom:20px;text-shadow:1px 1px 6px #000;font-weight:700;}
 #invite p{font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;margin-bottom:30px;font-weight:700;}
+#invite button{margin-top:20px;}
+#invite select{margin-top:20px;padding:8px 12px;font-weight:700;}
+
+/* Buttons */
 button{background:none;border:2px solid var(--lila);color:var(--lila);padding:14px 30px;font-size:18px;cursor:pointer;transition:.3s;font-weight:700;}
 button:hover{background:var(--lila);color:#000;box-shadow:0 0 20px rgba(176,106,179,.6);}
 
@@ -47,23 +51,32 @@ input,textarea,select{width:100%;padding:12px;margin-top:6px;background:#1a1a1a;
 
 /* Admin */
 .admin{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:6;max-width:95%;padding:25px;background:var(--panel);border:2px solid var(--lila);}
-table{width:100%;border-collapse:collapse;font-size:14px;}
-th,td{border:1px solid #444;padding:8px;color:var(--lila);}
+.admin table{display:block;overflow-x:auto;width:100%;border-collapse:collapse;font-size:16px;}
+th,td{border:1px solid #444;padding:8px;vertical-align:top;color:var(--lila);font-weight:700;}
+th{background:#1a1a1a;}
+canvas{display:block;margin:20px auto;background:#0e0e0e;border:1px solid #333;max-width:100%;}
 
+/* Footer */
 footer{position:fixed;bottom:10px;width:100%;z-index:7;text-align:center;font-weight:700;opacity:.7;}
 footer span{cursor:pointer;color:var(--lila);margin:0 5px;}
+footer span:hover{text-decoration:underline;}
 
-/* Zoom Effekt wie im Original */
-.slide{transform: scale(1);transition: transform 30s linear; animation: zoomfade 30s infinite;}
-@keyframes zoomfade{0%{transform:scale(1); opacity:0;} 10%{opacity:1;} 25%{opacity:1;} 35%{transform:scale(1.05); opacity:0;} 100%{opacity:0;}}
+/* Slideshow leichter Zoom */
+.slide{transform: scale(1);transition: transform 60s linear;}
+.slide:nth-child(1){animation:zoomfade1 60s infinite;}
+@keyframes zoomfade1{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 
+/* Responsive */
 @media(max-width:768px){
 #invite h1{font-size:36px;}
 #invite p{font-size:18px;}
+button{padding:12px 24px;font-size:16px;}
+.modal-box{width:95%;padding:25px;}
+.admin table{font-size:14px;}
 }
 </style>
 </head>
-<body onclick="playMusic()">
+<body>
 
 <div id="intro">
 Ein Stern am Himmel und Schatz auf Erden wird 90.<br>
@@ -85,13 +98,13 @@ Rückmeldung bitte bis Ende Februar.<br>
   <div class="slide"></div>
 </div>
 <div class="overlay"></div>
-<audio id="music" src="0118.mp3" loop></audio>
+<audio id="music" src="0118.mp3" autoplay loop muted></audio>
 
 <div id="invite">
 <h1 id="title"></h1>
 <p id="inviteText"></p>
 <button id="btnReply" onclick="openForm()"></button>
-<select id="langSelect" onchange="setLang(this.value)" style="width:auto; margin-top:20px;">
+<select id="langSelect" onchange="setLang(this.value)">
 <option value="de">Deutsch</option>
 <option value="pl">Polski</option>
 </select>
@@ -103,11 +116,11 @@ Rückmeldung bitte bis Ende Februar.<br>
 <label id="lblName"></label>
 <input id="mainName">
 <label id="lblPhone"></label>
-<input id="phone" type="tel">
+<input id="phone" pattern="[0-9]*" inputmode="numeric">
 <label id="lblTime"></label>
-<input type="time" id="time" value="13:00">
+<input type="time" id="time" min="13:00">
 <label id="lblCount"></label>
-<input type="number" id="count" min="1" max="10" value="1" onchange="buildPersons()">
+<input type="number" id="count" min="1" max="5" value="1" onchange="buildPersons()">
 <div id="persons"></div>
 <label id="lblMusic"></label>
 <textarea id="musicWish"></textarea>
@@ -115,102 +128,126 @@ Rückmeldung bitte bis Ende Februar.<br>
 <textarea id="message"></textarea>
 <br>
 <button id="btnSend" onclick="sendForm()"></button>
-<button id="btnClose" onclick="closeForm()">Schließen</button>
+<button id="btnClose" onclick="closeForm()"></button>
 <p id="formStatus"></p>
 </div>
 </div>
 
 <div class="admin" id="admin">
-<h2>📊 Admin</h2>
+<h2>📊 Admin – Gästeliste</h2>
 <h3 id="sum"></h3>
-<div style="overflow-x:auto;">
-<table id="adminTable">
-<thead><tr><th>Name</th><th>Anz.</th><th>Musik</th><th>Aktion</th></tr></thead>
+<canvas id="chart" width="1100" height="300"></canvas>
+<table>
+<thead>
+<tr><th>Name</th><th>Telefon</th><th>Zeit</th><th>Anz.</th><th>Personen</th><th>Musik</th><th>Nachricht</th><th>Aktion</th></tr>
+</thead>
 <tbody id="adminList"></tbody>
 </table>
-</div>
 <br>
-<button onclick="logout()">Logout</button>
+<button onclick="logout()">Admin schließen</button>
 </div>
 
 <footer>
-<span onclick="adminLogin()">Admin Login</span> | <span>Erstellt von Elias R.</span>
+<span onclick="adminLogin()">Admin Login</span> | 
+<span onclick="window.open('https://instagram.com/placeholder','_blank')">Erstellt von Elias R.</span>
 </footer>
 
 <script>
+// Texte
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
 let currentLang="de";
 const TXT={
-de:{title:"Liebe Familie und Freunde!",inviteText:`Ein Stern am Himmel und Schatz auf Erden wird 90...`,reply:"Rückmeldung geben",formTitle:"Rückmeldung",replyBtnSend:"Absenden",person:"Person",lblName:"Name",lblPhone:"Telefon",lblTime:"Zeit",lblCount:"Personen",lblMusic:"Musikwunsch",lblMessage:"Nachricht",saved:"✔ Gespeichert",adminPw:"Passwort?"},
-pl:{title:"Droga Rodzino!",inviteText:`Gwiazda na niebie...`,reply:"Odpowiedź",formTitle:"Odpowiedź",replyBtnSend:"Wyślij",person:"Osoba",lblName:"Imię",lblPhone:"Telefon",lblTime:"Godzina",lblCount:"Liczba osób",lblMusic:"Muzyka",lblMessage:"Wiadomość",saved:"✔ Zapisano",adminPw:"Hasło?"}
+de:{title:"Liebe Familie und Freunde!",inviteText:`Ein Stern am Himmel und Schatz auf Erden wird 90.<br><br>
+Wir laden herzlich ein, den 90. Geburtstag von <b>Maria Ronczka</b> mit uns zu feiern!<br><br>
+<b>Wann:</b> Samstag, den 11. April 2026, ab 13 Uhr<br>
+<b>Wo:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
+Wir freuen uns auf einen schönen Tag mit Euch.<br>
+Leider können wir keine Übernachtung anbieten.<br>
+Rückmeldung bitte bis Ende Februar.<br><br>
+<b>Herzliche Grüße, Maria Ronczka mit Familie</b>`,
+reply:"Rückmeldung geben",formTitle:"Rückmeldung",replyBtnSend:"Absenden",replyBtnClose:"Schließen",saved:"✔ Gespeichert",
+person:"Person",lblName:"Ihr Name",lblPhone:"Telefonnummer",lblTime:"Ankunft (ab 13 Uhr)",lblCount:"Anzahl Personen (max 5)",lblMusic:"Musikwunsch (optional)",lblMessage:"Nachricht",adminPw:"Admin Passwort",total:"Gesamtpersonen:",delConfirm:"Eintrag löschen?"},
+pl:{title:"Droga Rodzino i Przyjaciele!",inviteText:`Gwiazda na niebie i skarb na ziemi kończy 90 lat.<br><br>
+Serdecznie zapraszamy na 90. urodziny <b>Maria Ronczka</b>!<br><br>
+<b>Kiedy:</b> Sobota, 11 kwietnia 2026, od 13:00<br>
+<b>Gdzie:</b> Gasthaus Greskamp, Funnenkampstraße 18, 59399 Olfen<br><br>
+Cieszymy się na wspólny piękny dzień.<br>
+Niestety nie możemy zaoferować noclegu.<br>
+Prosimy o odpowiedź do końca lutego.<br><br>
+<b>Pozdrawiamy, Maria Ronczka z rodziną</b>`,
+reply:"Odpowiedź",formTitle:"Odpowiedź",replyBtnSend:"Wyślij",replyBtnClose:"Zamknij",saved:"✔ Zapisano",
+person:"Osoba",lblName:"Twoje imię",lblPhone:"Telefon",lblTime:"Godzina przybycia (od 13:00)",lblCount:"Liczba osób (max 5)",lblMusic:"Życzenie muzyczne (opcjonalnie)",lblMessage:"Wiadomość",adminPw:"Hasło admina",total:"Liczba osób:",delConfirm:"Usunąć wpis?"}
 };
 
-function playMusic() { 
-    const audio = document.getElementById('music');
-    audio.play().catch(() => {});
-}
-
+// Sprache setzen
 function setLang(l){
-    currentLang=l;
-    document.getElementById('title').innerText=TXT[l].title;
-    document.getElementById('btnReply').innerText=TXT[l].reply;
-    document.getElementById('formTitle').innerText=TXT[l].formTitle;
-    document.getElementById('lblName').innerText=TXT[l].lblName;
-    document.getElementById('lblPhone').innerText=TXT[l].lblPhone;
-    document.getElementById('lblTime').innerText=TXT[l].lblTime;
-    document.getElementById('lblCount').innerText=TXT[l].lblCount;
-    document.getElementById('lblMusic').innerText=TXT[l].lblMusic;
-    document.getElementById('lblMessage').innerText=TXT[l].lblMessage;
-    document.getElementById('btnSend').innerText=TXT[l].replyBtnSend;
+currentLang=l;
+title.innerHTML=TXT[l].title;
+inviteText.innerHTML=TXT[l].inviteText;
+btnReply.innerHTML=TXT[l].reply;
+formTitle.innerHTML=TXT[l].formTitle;
+lblName.innerHTML=TXT[l].lblName;
+lblPhone.innerHTML=TXT[l].lblPhone;
+lblTime.innerHTML=TXT[l].lblTime;
+lblCount.innerHTML=TXT[l].lblCount;
+lblMusic.innerHTML=TXT[l].lblMusic;
+lblMessage.innerHTML=TXT[l].lblMessage;
+btnSend.innerText=TXT[l].replyBtnSend;
+btnClose.innerText=TXT[l].replyBtnClose;
+buildPersons();
 }
 setLang("de");
 
+// Intro + Slideshow + Musik Fix
 window.addEventListener('load',()=>{
-    setTimeout(()=>{
-        document.getElementById('intro').style.opacity=0;
-        setTimeout(()=>{
-            document.getElementById('intro').style.display='none';
-            document.getElementById('bg').style.display='block';
-            document.getElementById('invite').style.display='flex';
-        },1000);
-    },5000);
+const intro=document.getElementById('intro');
+const bg=document.getElementById('bg');
+const invite=document.getElementById('invite');
+const music=document.getElementById('music');
+
+// Musik startet beim ersten Klick auf die Seite (Browser-Sperre umgehen)
+document.body.addEventListener('click', function() {
+    music.muted = false;
+    music.play().catch(()=>{});
+}, {once:true});
+
+setTimeout(()=>{
+intro.style.opacity=0;
+setTimeout(()=>{
+intro.style.display='none';
+bg.style.display='block';
+invite.style.display='flex';
+},1000);
+},5000);
 });
 
-function openForm(){document.getElementById('formModal').style.display="flex"; buildPersons();}
-function closeForm(){document.getElementById('formModal').style.display="none";}
-
-function buildPersons(){
-    const p = document.getElementById('persons'); p.innerHTML="";
-    const n = document.getElementById('count').value;
-    for(let i=1;i<=n;i++){ p.innerHTML+=`<input class="person" placeholder="Person ${i}">`; }
-}
-
+// Form
+function openForm(){formModal.style.display="flex";buildPersons();}
+function closeForm(){formModal.style.display="none";}
+function buildPersons(){persons.innerHTML="";const n=Math.min(parseInt(count.value)||1,5);for(let i=1;i<=n;i++){persons.innerHTML+=`<label>${TXT[currentLang].person} ${i}</label><input class="person">`}}
 async function sendForm(){
-    const data={
-        mainName:document.getElementById('mainName').value,
-        count:document.getElementById('count').value,
-        music:document.getElementById('musicWish').value,
-        message:document.getElementById('message').value
-    };
-    await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
-    document.getElementById('formStatus').innerText=TXT[currentLang].saved;
-    setTimeout(closeForm,1500);
+formStatus.innerText="Übertrage Daten...";
+const personsArr=[...document.querySelectorAll(".person")].map(p=>p.value);
+const phoneVal=phone.value.replace(/\D/g,'');
+if(!phoneVal){alert("Telefonnummer nur Zahlen!");formStatus.innerText="";return;}
+const data={mainName:mainName.value,phone:phoneVal,time:time.value,count:personsArr.length,persons:personsArr,music:musicWish.value,message:message.value,ts:new Date().toLocaleString()};
+await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
+formStatus.innerText=TXT[currentLang].saved;
+closeForm();
 }
 
-async function adminLogin(){
-    if(prompt(TXT[currentLang].adminPw)!=="maria90")return;
-    document.getElementById('admin').style.display="block";
-    loadAdmin();
-}
-async function loadAdmin(){
-    const res=await fetch(DB+".json"); const data=await res.json();
-    const list=document.getElementById('adminList'); list.innerHTML="";
-    for(let id in data){
-        list.innerHTML+=`<tr><td>${data[id].mainName}</td><td>${data[id].count}</td><td>${data[id].music}</td><td><button onclick="del('${id}')">❌</button></td></tr>`;
-    }
-}
-async function del(id){ await fetch(`${DB}/${id}.json`,{method:"DELETE"}); loadAdmin(); }
-function logout(){document.getElementById('admin').style.display="none";}
+// Admin
+async function adminLogin(){if(prompt(TXT[currentLang].adminPw)!=="maria90")return;invite.style.display="none";admin.style.display="block";loadAdmin();}
+function logout(){admin.style.display="none";invite.style.display="flex";}
+async function loadAdmin(){const res=await fetch(DB+".json");const data=await res.json();let total=0,values=[];adminList.innerHTML="";for(const id in data){const d=data[id];total+=d.count;values.push(d.count);
+// Hier wurde id hinzugefügt für das Speichern
+adminList.innerHTML+=`<tr id="row-${id}"><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`}sum.innerText=TXT[currentLang].total+" "+total;drawChart(values);}
+async function saveRow(id){
+// Korrektur: Zeile wird jetzt sicher gefunden
+const row=document.getElementById("row-"+id);
+const tds=row.children;const persons=tds[4].innerText.split(",").map(p=>p.trim());const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});loadAdmin();}
+async function del(id){if(!confirm(TXT[currentLang].delConfirm))return;await fetch(DB+"/"+id+".json",{method:"DELETE"});loadAdmin();}
+function drawChart(values){const ctx=chart.getContext("2d");ctx.clearRect(0,0,chart.width,chart.height);const max=Math.max(...values,1);values.forEach((v,i)=>{const h=(v/max)*250;ctx.fillStyle="#b06ab3";ctx.fillRect(i*50+20,280-h,30,h);});}
 </script>
 </body>
 </html>

@@ -14,49 +14,56 @@ body{display:flex;flex-direction:column;align-items:center;text-align:center;lin
 /* Intro-Text */
 #intro{
 position:fixed;top:100px;left:50%;transform:translateX(-50%);
-max-width:800px;width:90%;padding:40px 20px;background:none;color:var(--lila);
+max-width:800px;padding:40px 20px;background:none;color:var(--lila);
 font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;z-index:10;transition:opacity 1s;
 }
 
 /* Hintergrundslideshow */
 #bg{position:fixed;inset:0;z-index:-3;height:100%;width:100%;display:none;}
-.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 30s infinite linear;height:100%;width:100%;}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 30s infinite;height:100%;width:100%;}
 
-/* Hier sind die Pfade exakt nach deinen Bildern benannt */
+/* EXAKTE PFADE ZU DEINEN BILDERN */
 .slide:nth-child(1){background-image:url("bilder/bild1.jpg");animation-delay:0s;}
 .slide:nth-child(2){background-image:url("bilder/bild2.jpg");animation-delay:6s;}
 .slide:nth-child(3){background-image:url("bilder/bild3.jpg");animation-delay:12s;}
 .slide:nth-child(4){background-image:url("bilder/bild4.jpg");animation-delay:18s;}
 .slide:nth-child(5){background-image:url("bilder/bild5.jpg");animation-delay:24s;}
 
-@keyframes fade{0%{opacity:0}10%{opacity:1}25%{opacity:1}35%{opacity:0}100%{opacity:0}}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:-2;pointer-events:none;}
+@keyframes fade{0%{opacity:0}8%{opacity:1}22%{opacity:1}30%{opacity:0}}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.1);z-index:-2;pointer-events:none;}
 
 /* Einladungstext */
-#invite{position:relative;z-index:2;padding:40px 20px;display:none;flex-direction:column;justify-content:center;align-items:center;margin-top:80px;max-width:800px;}
-#invite h1{color:var(--lila);font-size:48px;margin-bottom:20px;text-shadow:1px 1px 6px #000;}
-#invite p{font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;margin-bottom:30px;}
-
-/* Buttons */
-button{background:rgba(0,0,0,0.6);border:2px solid var(--lila);color:var(--lila);padding:14px 30px;font-size:18px;cursor:pointer;transition:.3s;font-weight:700;border-radius:5px;}
+#invite{position:relative;z-index:2;padding:40px 20px;display:none;flex-direction:column;justify-content:center;align-items:center;margin-top:100px;max-width:800px;}
+#invite h1{color:var(--lila);font-size:48px;margin-bottom:20px;text-shadow:1px 1px 6px #000;font-weight:700;}
+#invite p{font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;margin-bottom:30px;font-weight:700;}
+button{background:none;border:2px solid var(--lila);color:var(--lila);padding:14px 30px;font-size:18px;cursor:pointer;transition:.3s;font-weight:700;}
 button:hover{background:var(--lila);color:#000;box-shadow:0 0 20px rgba(176,106,179,.6);}
 
 /* Formular */
+label{display:block;margin-top:14px;font-size:16px;font-weight:700;}
 input,textarea,select{width:100%;padding:12px;margin-top:6px;background:#1a1a1a;border:1px solid #444;color:var(--lila);font-family:inherit;font-weight:700;}
-.modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.85);z-index:100;}
-.modal-box{background:var(--panel);border:2px solid var(--lila);padding:30px;width:92%;max-width:520px;max-height:90vh;overflow-y:auto;text-align:left;}
+.modal{position:fixed;inset:0;display:none;justify-content:center;align-items:center;background:rgba(0,0,0,.85);z-index:5;}
+.modal-box{background:var(--panel);border:2px solid var(--lila);padding:30px;width:92%;max-width:520px;max-height:90vh;overflow:auto;}
 
 /* Admin */
-.admin{display:none;padding:25px;background:var(--panel);border:2px solid var(--lila);margin:20px;width:95%;}
-table{width:100%;border-collapse:collapse;margin-top:20px;}
-th,td{border:1px solid #444;padding:8px;text-align:left;}
+.admin{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:6;max-width:95%;padding:25px;background:var(--panel);border:2px solid var(--lila);}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{border:1px solid #444;padding:8px;color:var(--lila);}
 
-/* Footer */
-footer{padding:20px;width:100%;z-index:7;text-align:center;font-weight:700;opacity:.7;}
+footer{position:fixed;bottom:10px;width:100%;z-index:7;text-align:center;font-weight:700;opacity:.7;}
 footer span{cursor:pointer;color:var(--lila);margin:0 5px;}
+
+/* Zoom Effekt wie im Original */
+.slide{transform: scale(1);transition: transform 30s linear; animation: zoomfade 30s infinite;}
+@keyframes zoomfade{0%{transform:scale(1); opacity:0;} 10%{opacity:1;} 25%{opacity:1;} 35%{transform:scale(1.05); opacity:0;} 100%{opacity:0;}}
+
+@media(max-width:768px){
+#invite h1{font-size:36px;}
+#invite p{font-size:18px;}
+}
 </style>
 </head>
-<body onclick="startMusic()">
+<body onclick="playMusic()">
 
 <div id="intro">
 Ein Stern am Himmel und Schatz auf Erden wird 90.<br>
@@ -73,7 +80,7 @@ Rückmeldung bitte bis Ende Februar.<br>
 <div id="bg">
   <div class="slide"></div>
   <div class="slide"></div>
-  <div class="slide) "></div>
+  <div class="slide"></div>
   <div class="slide"></div>
   <div class="slide"></div>
 </div>
@@ -84,7 +91,7 @@ Rückmeldung bitte bis Ende Februar.<br>
 <h1 id="title"></h1>
 <p id="inviteText"></p>
 <button id="btnReply" onclick="openForm()"></button>
-<select id="langSelect" onchange="setLang(this.value)" style="width:auto; margin-top:30px;">
+<select id="langSelect" onchange="setLang(this.value)" style="width:auto; margin-top:20px;">
 <option value="de">Deutsch</option>
 <option value="pl">Polski</option>
 </select>
@@ -92,149 +99,118 @@ Rückmeldung bitte bis Ende Februar.<br>
 
 <div class="modal" id="formModal">
 <div class="modal-box">
-<h2 id="formTitle" style="margin-bottom:15px;"></h2>
+<h2 id="formTitle"></h2>
 <label id="lblName"></label>
-<input id="mainName" placeholder="Name">
+<input id="mainName">
 <label id="lblPhone"></label>
-<input id="phone" type="tel" placeholder="0170...">
+<input id="phone" type="tel">
 <label id="lblTime"></label>
 <input type="time" id="time" value="13:00">
 <label id="lblCount"></label>
 <input type="number" id="count" min="1" max="10" value="1" onchange="buildPersons()">
 <div id="persons"></div>
 <label id="lblMusic"></label>
-<textarea id="musicWish" placeholder="Liedtitel..."></textarea>
+<textarea id="musicWish"></textarea>
 <label id="lblMessage"></label>
-<textarea id="message" placeholder="Nachricht..."></textarea>
-<br><br>
+<textarea id="message"></textarea>
+<br>
 <button id="btnSend" onclick="sendForm()"></button>
-<button id="btnClose" onclick="closeForm()" style="border:none;">Abbrechen</button>
-<p id="formStatus" style="margin-top:10px;"></p>
+<button id="btnClose" onclick="closeForm()">Schließen</button>
+<p id="formStatus"></p>
 </div>
 </div>
 
-<div class="admin" id="adminArea">
-<h2>📊 Gästeliste</h2>
-<p id="sum"></p>
+<div class="admin" id="admin">
+<h2>📊 Admin</h2>
+<h3 id="sum"></h3>
 <div style="overflow-x:auto;">
-<table>
-<thead>
-<tr><th>Name</th><th>Tel</th><th>Zeit</th><th>Anz.</th><th>Nachricht</th><th>Aktion</th></tr>
-</thead>
+<table id="adminTable">
+<thead><tr><th>Name</th><th>Anz.</th><th>Musik</th><th>Aktion</th></tr></thead>
 <tbody id="adminList"></tbody>
 </table>
 </div>
 <br>
-<button onclick="logout()">Schließen</button>
+<button onclick="logout()">Logout</button>
 </div>
 
 <footer>
-<span onclick="adminLogin()">Admin</span> | 
-<span>Erstellt von Elias R.</span>
+<span onclick="adminLogin()">Admin Login</span> | <span>Erstellt von Elias R.</span>
 </footer>
 
 <script>
 const DB="https://geburtstag-bff4c-default-rtdb.europe-west1.firebasedatabase.app/anmeldungen";
 let currentLang="de";
 const TXT={
-de:{title:"Liebe Familie und Freunde!",inviteText:`Ein Stern am Himmel und Schatz auf Erden wird 90.<br><br><b>Wann:</b> 11. April 2026, 13:00 Uhr<br><b>Wo:</b> Gasthaus Greskamp, Olfen`,reply:"Rückmeldung geben",formTitle:"Anmeldung",replyBtnSend:"Absenden",person:"Person",lblName:"Name",lblPhone:"Telefon",lblTime:"Ankunft",lblCount:"Personen Anzahl",lblMusic:"Musikwunsch",lblMessage:"Nachricht",saved:"✔ Gespeichert!",adminPw:"Passwort?",total:"Gäste gesamt:"},
-pl:{title:"Droga Rodzino i Przyjaciele!",inviteText:`Gwiazda na niebie i skarb na ziemi kończy 90 lat.<br><br><b>Kiedy:</b> 11 kwietnia 2026, 13:00<br><b>Gdzie:</b> Gasthaus Greskamp, Olfen`,reply:"Odpowiedz",formTitle:"Zaproszenie",replyBtnSend:"Wyślij",person:"Osoba",lblName:"Imię",lblPhone:"Telefon",lblTime:"Godzina",lblCount:"Liczba osób",lblMusic:"Muzyka",lblMessage:"Wiadomość",saved:"✔ Zapisano!",adminPw:"Hasło?",total:"Suma osób:"}
+de:{title:"Liebe Familie und Freunde!",inviteText:`Ein Stern am Himmel und Schatz auf Erden wird 90...`,reply:"Rückmeldung geben",formTitle:"Rückmeldung",replyBtnSend:"Absenden",person:"Person",lblName:"Name",lblPhone:"Telefon",lblTime:"Zeit",lblCount:"Personen",lblMusic:"Musikwunsch",lblMessage:"Nachricht",saved:"✔ Gespeichert",adminPw:"Passwort?"},
+pl:{title:"Droga Rodzino!",inviteText:`Gwiazda na niebie...`,reply:"Odpowiedź",formTitle:"Odpowiedź",replyBtnSend:"Wyślij",person:"Osoba",lblName:"Imię",lblPhone:"Telefon",lblTime:"Godzina",lblCount:"Liczba osób",lblMusic:"Muzyka",lblMessage:"Wiadomość",saved:"✔ Zapisano",adminPw:"Hasło?"}
 };
 
+function playMusic() { 
+    const audio = document.getElementById('music');
+    audio.play().catch(() => {});
+}
+
 function setLang(l){
-currentLang=l;
-document.getElementById('title').innerText=TXT[l].title;
-document.getElementById('inviteText').innerHTML=TXT[l].inviteText;
-document.getElementById('btnReply').innerText=TXT[l].reply;
-document.getElementById('formTitle').innerText=TXT[l].formTitle;
-document.getElementById('lblName').innerText=TXT[l].lblName;
-document.getElementById('lblPhone').innerText=TXT[l].lblPhone;
-document.getElementById('lblTime').innerText=TXT[l].lblTime;
-document.getElementById('lblCount').innerText=TXT[l].lblCount;
-document.getElementById('lblMusic').innerText=TXT[l].lblMusic;
-document.getElementById('lblMessage').innerText=TXT[l].lblMessage;
-document.getElementById('btnSend').innerText=TXT[l].replyBtnSend;
-buildPersons();
+    currentLang=l;
+    document.getElementById('title').innerText=TXT[l].title;
+    document.getElementById('btnReply').innerText=TXT[l].reply;
+    document.getElementById('formTitle').innerText=TXT[l].formTitle;
+    document.getElementById('lblName').innerText=TXT[l].lblName;
+    document.getElementById('lblPhone').innerText=TXT[l].lblPhone;
+    document.getElementById('lblTime').innerText=TXT[l].lblTime;
+    document.getElementById('lblCount').innerText=TXT[l].lblCount;
+    document.getElementById('lblMusic').innerText=TXT[l].lblMusic;
+    document.getElementById('lblMessage').innerText=TXT[l].lblMessage;
+    document.getElementById('btnSend').innerText=TXT[l].replyBtnSend;
 }
 setLang("de");
 
-// Musik-Start bei Klick
-function startMusic(){
-const m = document.getElementById('music');
-if(m.paused) m.play().catch(e=>console.log("Audio blockiert"));
-}
-
-// Intro Timer
 window.addEventListener('load',()=>{
-setTimeout(()=>{
-document.getElementById('intro').style.opacity=0;
-setTimeout(()=>{
-document.getElementById('intro').style.display='none';
-document.getElementById('bg').style.display='block';
-document.getElementById('invite').style.display='flex';
-},1000);
-},5000);
+    setTimeout(()=>{
+        document.getElementById('intro').style.opacity=0;
+        setTimeout(()=>{
+            document.getElementById('intro').style.display='none';
+            document.getElementById('bg').style.display='block';
+            document.getElementById('invite').style.display='flex';
+        },1000);
+    },5000);
 });
 
-function openForm(){document.getElementById('formModal').style.display="flex";}
+function openForm(){document.getElementById('formModal').style.display="flex"; buildPersons();}
 function closeForm(){document.getElementById('formModal').style.display="none";}
 
 function buildPersons(){
-const p = document.getElementById('persons'); p.innerHTML="";
-const n = document.getElementById('count').value;
-for(let i=1; i<=n; i++){
-p.innerHTML += `<input class="pName" placeholder="${TXT[currentLang].person} ${i} Name" style="margin-bottom:5px;">`;
-}
+    const p = document.getElementById('persons'); p.innerHTML="";
+    const n = document.getElementById('count').value;
+    for(let i=1;i<=n;i++){ p.innerHTML+=`<input class="person" placeholder="Person ${i}">`; }
 }
 
 async function sendForm(){
-const btn = document.getElementById('btnSend');
-btn.disabled = true;
-document.getElementById('formStatus').innerText = "Wird gesendet...";
-
-const pNames = [...document.querySelectorAll(".pName")].map(i=>i.value);
-const data = {
-name: document.getElementById('mainName').value,
-phone: document.getElementById('phone').value,
-time: document.getElementById('time').value,
-count: pNames.length,
-guestNames: pNames,
-music: document.getElementById('musicWish').value,
-msg: document.getElementById('message').value,
-date: new Date().toLocaleString()
-};
-
-try{
-await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
-document.getElementById('formStatus').innerText = TXT[currentLang].saved;
-setTimeout(closeForm, 2000);
-}catch(e){ alert("Fehler!"); }
-btn.disabled = false;
+    const data={
+        mainName:document.getElementById('mainName').value,
+        count:document.getElementById('count').value,
+        music:document.getElementById('musicWish').value,
+        message:document.getElementById('message').value
+    };
+    await fetch(DB+".json",{method:"POST",body:JSON.stringify(data)});
+    document.getElementById('formStatus').innerText=TXT[currentLang].saved;
+    setTimeout(closeForm,1500);
 }
 
 async function adminLogin(){
-if(prompt(TXT[currentLang].adminPw)!=="maria90") return;
-document.getElementById('invite').style.display="none";
-document.getElementById('adminArea').style.display="block";
-loadAdmin();
+    if(prompt(TXT[currentLang].adminPw)!=="maria90")return;
+    document.getElementById('admin').style.display="block";
+    loadAdmin();
 }
-
 async function loadAdmin(){
-const res = await fetch(DB+".json");
-const data = await res.json();
-const list = document.getElementById('adminList');
-let sum = 0; list.innerHTML="";
-for(let id in data){
-sum += parseInt(data[id].count);
-list.innerHTML += `<tr><td>${data[id].name}</td><td>${data[id].phone}</td><td>${data[id].time}</td><td>${data[id].count}</td><td>${data[id].msg}</td><td><button onclick="del('${id}')">❌</button></td></tr>`;
+    const res=await fetch(DB+".json"); const data=await res.json();
+    const list=document.getElementById('adminList'); list.innerHTML="";
+    for(let id in data){
+        list.innerHTML+=`<tr><td>${data[id].mainName}</td><td>${data[id].count}</td><td>${data[id].music}</td><td><button onclick="del('${id}')">❌</button></td></tr>`;
+    }
 }
-document.getElementById('sum').innerText = TXT[currentLang].total + " " + sum;
-}
-
-async function del(id){
-if(confirm("Löschen?")) { await fetch(`${DB}/${id}.json`,{method:"DELETE"}); loadAdmin(); }
-}
-function logout(){ location.reload(); }
+async function del(id){ await fetch(`${DB}/${id}.json`,{method:"DELETE"}); loadAdmin(); }
+function logout(){document.getElementById('admin').style.display="none";}
 </script>
 </body>
 </html>

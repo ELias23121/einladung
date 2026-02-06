@@ -22,7 +22,7 @@ font-size:22px;line-height:1.8;text-shadow:1px 1px 4px #000;z-index:10;transitio
 #bg{position:fixed;inset:0;z-index:-3;height:100%;width:100%;display:none;}
 .slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:fade 60s infinite;height:100%;width:100%;}
 
-/* PFAD-KORREKTUR FÜR GITHUB */
+/* PFAD KORREKTUR: ./ hinzugefügt für GitHub */
 .slide:nth-child(1){background-image:url("./bilder/bild1.jpg");animation-delay:0s;}
 .slide:nth-child(2){background-image:url("./bilder/bild2.jpg");animation-delay:12s;}
 .slide:nth-child(3){background-image:url("./bilder/bild3.jpg");animation-delay:24s;}
@@ -98,7 +98,7 @@ Rückmeldung bitte bis Ende Februar.<br>
   <div class="slide"></div>
 </div>
 <div class="overlay"></div>
-<audio id="music" src="0118.mp3" autoplay loop muted></audio>
+<audio id="music" src="0118.mp3" loop></audio>
 
 <div id="invite">
 <h1 id="title"></h1>
@@ -205,11 +205,12 @@ const bg=document.getElementById('bg');
 const invite=document.getElementById('invite');
 const music=document.getElementById('music');
 
-// Musik startet beim ersten Klick auf die Seite (Browser-Sperre umgehen)
+// MUSIK FIX: Startet erst beim ersten Klick (Notwendig für Handys)
 document.body.addEventListener('click', function() {
-    music.muted = false;
-    music.play().catch(()=>{});
-}, {once:true});
+    if(music.paused){
+        music.play().catch(e=>console.log("Audio noch blockiert"));
+    }
+}, {once:true}); // Nur einmal ausführen
 
 setTimeout(()=>{
 intro.style.opacity=0;
@@ -239,13 +240,32 @@ closeForm();
 // Admin
 async function adminLogin(){if(prompt(TXT[currentLang].adminPw)!=="maria90")return;invite.style.display="none";admin.style.display="block";loadAdmin();}
 function logout(){admin.style.display="none";invite.style.display="flex";}
-async function loadAdmin(){const res=await fetch(DB+".json");const data=await res.json();let total=0,values=[];adminList.innerHTML="";for(const id in data){const d=data[id];total+=d.count;values.push(d.count);
-// Hier wurde id hinzugefügt für das Speichern
-adminList.innerHTML+=`<tr id="row-${id}"><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`}sum.innerText=TXT[currentLang].total+" "+total;drawChart(values);}
+async function loadAdmin(){
+    const res=await fetch(DB+".json");
+    const data=await res.json();
+    let total=0,values=[];
+    adminList.innerHTML="";
+    for(const id in data){
+        const d=data[id];
+        total+=d.count;
+        values.push(d.count);
+        // ID für das Speichern hinzugefügt
+        adminList.innerHTML+=`<tr id="row-${id}"><td contenteditable="true">${d.mainName}</td><td contenteditable="true">${d.phone}</td><td contenteditable="true">${d.time}</td><td contenteditable="true">${d.count}</td><td contenteditable="true">${d.persons.join(", ")}</td><td contenteditable="true">${d.music}</td><td contenteditable="true">${d.message}</td><td><button onclick="saveRow('${id}')">💾</button> <button onclick="del('${id}')">🗑</button></td></tr>`;
+    }
+    sum.innerText=TXT[currentLang].total+" "+total;
+    drawChart(values);
+}
+
 async function saveRow(id){
-// Korrektur: Zeile wird jetzt sicher gefunden
-const row=document.getElementById("row-"+id);
-const tds=row.children;const persons=tds[4].innerText.split(",").map(p=>p.trim());const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});loadAdmin();}
+    // Korrigierte Speicher-Funktion, findet jetzt sicher die Zeile
+    const row=document.getElementById("row-"+id);
+    const tds=row.children;
+    const persons=tds[4].innerText.split(",").map(p=>p.trim());
+    const data={mainName:tds[0].innerText,phone:tds[1].innerText,time:tds[2].innerText,count:Number(tds[3].innerText),persons:persons,music:tds[5].innerText,message:tds[6].innerText};
+    await fetch(DB+"/"+id+".json",{method:"PATCH",body:JSON.stringify(data)});
+    loadAdmin();
+}
+
 async function del(id){if(!confirm(TXT[currentLang].delConfirm))return;await fetch(DB+"/"+id+".json",{method:"DELETE"});loadAdmin();}
 function drawChart(values){const ctx=chart.getContext("2d");ctx.clearRect(0,0,chart.width,chart.height);const max=Math.max(...values,1);values.forEach((v,i)=>{const h=(v/max)*250;ctx.fillStyle="#b06ab3";ctx.fillRect(i*50+20,280-h,30,h);});}
 </script>
